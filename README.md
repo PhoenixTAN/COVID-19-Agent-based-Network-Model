@@ -2,20 +2,19 @@
 
 The purpose of this project is to build a working computer simulation of the COVID-19 pandemic using parallel programming.
 ## Team B
-Tech lead: TBD
+Tech lead: Ziqi Tan
 
-- Kaijia You
-- Peiqing Lu
-- Tian Ding
-- Xiaoxin Gan
-- Xueyan Xia
-- Zhelin Liao
-- Ziqi Tan
-
+| Member      | BU ID       | Email           |
+|-------------|-------------|-----------------|
+| Kaijia You  | U 44518396  | caydenyo@bu.edu |
+| Peiqing Lu  | U 93836939  | lujason@bu.edu  |
+| Tian Ding   | U 90706530  | dingtian@bu.edu |
+| Xiaoxin Gan | U 98012154  | xiaoxing@bu.edu |
+| Xueyan Xia  | U 82450191  | xueyanx@bu.edu  |
+| Zhelin Liao | U 11064341  | seanliao@bu.edu |
+| Ziqi Tan    | U 88387934  | ziqi1756@bu.edu |
 
 ## Task Instructions
-
-
 - The results can easily be recognized as a representation of the workings of contagion, recovery, and death in the pandemic. The graph of new infections, for instance, should have a shape that resembles the curve produced by other standard simulations.
 
 - The primary aim of this project is **not** to have an impressive performance or to have a simulation so realistic as to provide accurate numerical predictions, but rather to give you a good learning experience in the design of a simulation **from scratch** and its implementation by means of the standard parallel programming techniques we have learned in the course.
@@ -90,25 +89,40 @@ Individual has different state under such a pandemic.
 5. People who get contact with infected will get infected.
 5. COVID-19 cannot spread among individuals who are in a quarantine state.
 6. The incubation period is typically around 5 days but may range from one to 14 days.
+7. Every individual only has one event each hour.
 
 #### Network
 - Use an array to represent agents. 
 - A global clock whose time step is an hour.
 
-#### Parallel Computing Technology
-- C++ and OpenMP.
-- Each thread takes care of an agent.
-- Each agent polls the clock.
+```java
+class Agent {
+    ArrayList<Integer> neighbors;   // Integer is the index
+}
+
+Agent[] network = new Agent[1000000];
+```
+
+#### Object-Oriented Design
+- Variants of the agents.
+- Social network (graph, neighbors).
+- Schedule (a list of events to do). In an hour, an agent will have only one event.
+    1. Person A state: exposed, Person B state: mild
+    2. At 8:00 AM, A and B had a meeting. A got infected.
+    3. A.nextState = presymtomatic
+    4. At 8:59 AM, update the state of A and the state of B.
+    5. A.state = presymtomatic, B.state = mild.
+- Current status: susceptible, exposed, presymptomatic, asymptomatic, mild, severe and dead.
 
 #### Events
 - The time step is an hour. In an hour, an agent will have only one event.
 - Every hour, the agent's state may transit.
+- Based Class Event, subClass: meeting, social interactions, courses.
 
-#### Object-Oriented Design
-- Variants of the agents.
-- Social network (neighbors).
-- Schedule (a list of events to do). 
-- Current status: susceptible, exposed, presymptomatic, asymptomatic, 
+#### Parallel Computing Technology
+- C++ and OpenMP/CUDA. (Try OpenMP first)
+- Each thread takes care of an agent.
+- Each agent polls the clock.
 
 #### Main Flow
 ```
@@ -127,24 +141,30 @@ Loop:
     clock = clock + 1 hour
 
 until the end of the 10 days
-
 ```
+
+#### The change of infection rate 
+TODO
+
+#### The precaution strategies
+1. Mask.
+2. Social distance.
 
 ## Statistic
 Statistics and plots.
 
+## Test
 
 ## Collaboration
 
 | **Person in charge** and Participants | Division of labor |
 |---------------------------------------|-------------------|
-|        | Tech lead.        |        
-|        | Documentation.    |
-|        | Presentation.     |
-|        | System design, Model integration and parallel computing design. |
-|        | Event design and programming. |
-|        | Agent object-oriented design and programming. |
-|        | Use different parameter to run the simulation.  Statistics and plotting, performance evaluation. |
+| Ziqi Tan       | Tech lead.        |
+| Zhelin Liao       | Presentation.     |
+| **Xueyan Xia**, Ziqi Tan | System design, Model integration and parallel computing design. |
+| **Tian Ding**, Zhelin Liao       | Event design and programming. |
+| **Kaijia You**, Peiqing Lu| Agent object-oriented design and programming. |
+| Xiaoxin gan | Test the model. Use different parameters to run the simulation.  Statistics and plotting, performance evaluation. |
 
 The **Bold name** is the name of the person in charge.
 
