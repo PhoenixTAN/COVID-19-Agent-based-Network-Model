@@ -65,33 +65,47 @@ where alpha is the transmission rate and beta is the recover rate.
 
 ### COVID-19 Pandemic Model
 
-We continue to integrate more factors into the basic SIR model to get our COVID-19 pandemic model.
+#### Social Network Model
+The traditional network-based SIR model assumes a 'homogeneous mixing', which means that any pair of members are equally like to interact with each other. This model deviates from the real-life situation because human interaction is constrained under different circumstances. 
 
-#### Finite State Machine of an Agent
+In this project, we adopt a social network model instead, to depict the social connection between members. Define social network as a graph G(V, E), each node V denotes an agent, each edge E denotes the direct social connection between two agents. Meanwhile, we can represent this graph using the adjacency matrix, as well as calculate the shortest path between two nodes and its distance Dmin(Vi, Vj).  
 
-Individual has different state under such a pandemic. 
+The probability of one-on-one interaction :
+P{ Agent i interact with Agent j } =   δ/Dmin(Vi, Vj)  when Dmin(Vi, Vj) != ∞
+                                       ρ               when Dmin(Vi, Vj)  = ∞
+Two individuals with closer proximity in the graph have a higher encounter probability, contrarily individuals with no direct or indirect connection have a low probability of meeting. We can use this to model the interaction and generate the social events.
 
-- **Susceptible**: an individual in a susceptible state is a member of a population who is at risk of becoming infected by a disease. 
-- **Exposed**: an individual in the exposed state will become a presymptomatic carrier or become an asymptomatic carrier.
+#### Agent Model
+We use the term 'agent' to describe an individual. An agent should maintain a wellness state and a schedule table.
 
-![alt finite-state-machine](./images/finite-state-machine.png)
+##### Wellness state
+We use Finite State Machine to represent the transmission of en agent's wellness state
+There are different states under the Covid-19 pandemic as follow: 
 
+- **Exposed**: an individual in the exposed state has contracted the virus and will become a presymptomatic carrier or an asymptomatic carrier.
 - **Presymptomatic**: not yet displaying symptoms of an illness or disease.
 - **Asymptomatic**: not causing, marked by, or presenting with signs or symptoms of infection, illness, or disease. 
-- **"Mild"** and **"Severe"** are symptomatic states. Individuals with mild symptoms may get **recovered** or get more severer (move to "Severe" state). Those in "Severe" state may have a certain **mortality** rate. 
+- **"Mild"** and **"Severe"** are symptomatic states. Individuals with mild symptoms may get **"Recovered"** or get **"Severe"**. Those in the **"Severe"** state may have a certain **mortality** rate.
+- **Recovered**: an individual who has recovered from COVID-19 will not get infected again.
+![alt finite-state-machine](./images/finite-state-machine.png)
 
-#### Assumptions
+##### Agent Schedule 
+Agent object maintain a 
 
-1. Total population size remains constant. 
-2. The time scale is short so that births and deaths (other than deaths caused by the COVID 19) can be neglected.
-3. Individuals who get recovered from COVID 19 will not get infected again.
-4. COVID-19 can spread as early as 2 days before infected persons show symptoms (presymptomatic), and from asymptomatic individuals.
-5. People who get contact with infected will get infected.
-5. COVID-19 cannot spread among individuals who are in a quarantine state.
-6. The incubation period is typically around 5 days but may range from one to 14 days.
-7. Every individual only has one event each hour.
+#### Event Model
 
-#### Network
+
+#### Predefine Model Constraints
+1. The number of the population remains constant. The model simulates the pandemic in such a short period that births and deaths (other than deaths caused by the COVID 19) can be neglected.
+2. COVID-19 can be spread 2 days after a person is exposed to the virus.  COVID-19 can also be spread from presymptomatic and asymptomatic individuals.
+3. People who contact with infected individuals may get infected with a contraction rate. The contraction rate is diffrent in different wellness state.
+4. COVID-19 cannot spread among individuals who are in a quarantine state.
+5. The incubation period is typically around 5 days but may range from 1 to 14 days.
+6. Every individual only has one event each hour.
+
+
+
+#### Object-Oriented Design
 - Use an array to represent agents. 
 - A global clock whose time step is an hour.
 
@@ -102,8 +116,6 @@ class Agent {
 
 Agent[] network = new Agent[1000000];
 ```
-
-#### Object-Oriented Design
 - Variants of the agents.
 - Social network (graph, neighbors).
 - Schedule (a list of events to do). In an hour, an agent will have only one event.
@@ -115,6 +127,10 @@ Agent[] network = new Agent[1000000];
 - Current status: susceptible, exposed, presymptomatic, asymptomatic, mild, severe and dead.
 
 #### Events
+Events currently we :
+meetings(more than )
+ 1000 agent - 1000 slot 
+
 - The time step is an hour. In an hour, an agent will have only one event.
 - Every hour, the agent's state may transit.
 - Based Class Event, subClass: meeting, social interactions, courses.
