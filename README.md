@@ -28,12 +28,12 @@ Tech lead: Ziqi Tan
 - Do not go shopping for ready-made, specialized libraries and software packages designed for the simulation of epidemics.  Instead, build your simulation and your implementation from the ground up.
 
 ## Epidemiology Terms
--**Social network**: a network(graph) that depict the social connection between individuals in a population
--**Agent**: a member of a population in the social network.
--**Susceptible individual**: a member of a population who is health but could be infected by the virus.
--**Infected individual**: a member of a population who has been exposed to the virus, no matter the individual shows any symptom or not. The infected status persists throughout the whole disease cycle unless the individual is recovered or dead.
--**Incubation period**: the time elapsed between exposure to virus, and when symptoms and signs are first apparent.
--**Event**: the activity of a individual
+- **Social network**: a network(graph) that depict the social connection between individuals in a population
+- **Agent**: a member of a population in the social network.
+- **Susceptible individual**: a member of a population who is health but could be infected by the virus.
+- **Infected individual**: a member of a population who has been exposed to the virus, no matter the individual shows any symptom or not. The infected status persists throughout the whole disease cycle unless the individual is recovered or dead.
+- **Incubation period**: the time elapsed between exposure to virus, and when symptoms and signs are first apparent.
+- **Event**: the activity of a individual
 
 ## System Model
 We are referencing an **agent-based network model** to simulate the process and outcome of the spread of the COVID-19. Our COVID-19 model is based on the traditional SIR model (Susceptible, Infectious, Recovered).
