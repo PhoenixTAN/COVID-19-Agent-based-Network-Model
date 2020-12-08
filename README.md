@@ -73,27 +73,35 @@ In this project, we adopt a social network model instead, to depict the social c
 The probability of one-on-one interaction :
 P{ Agent i interact with Agent j } =   δ/Dmin(Vi, Vj)  when Dmin(Vi, Vj) != ∞
                                        ρ               when Dmin(Vi, Vj)  = ∞
+                                       
 Two individuals with closer proximity in the graph have a higher encounter probability, contrarily individuals with no direct or indirect connection have a low probability of meeting. We can use this to model the interaction and generate the social events.
 
 #### Agent Model
 We use the term 'agent' to describe an individual. An agent should maintain a wellness state and a schedule table.
 
-##### Wellness state
+- **Wellness state** 
 We use Finite State Machine to represent the transmission of en agent's wellness state
 There are different states under the Covid-19 pandemic as follow: 
 
-- **Exposed**: an individual in the exposed state has contracted the virus and will become a presymptomatic carrier or an asymptomatic carrier.
-- **Presymptomatic**: not yet displaying symptoms of an illness or disease.
-- **Asymptomatic**: not causing, marked by, or presenting with signs or symptoms of infection, illness, or disease. 
-- **"Mild"** and **"Severe"** are symptomatic states. Individuals with mild symptoms may get **"Recovered"** or get **"Severe"**. Those in the **"Severe"** state may have a certain **mortality** rate.
-- **Recovered**: an individual who has recovered from COVID-19 will not get infected again.
+   - **Exposed**: an individual in the exposed state has contracted the virus and will become a presymptomatic carrier or an asymptomatic carrier.
+   - **Presymptomatic**: not yet displaying symptoms of an illness or disease.
+   - **Asymptomatic**: not causing, marked by, or presenting with signs or symptoms of infection, illness, or disease. 
+   - **"Mild"** and **"Severe"** are symptomatic states. Individuals with mild symptoms may get **"Recovered"** or get **"Severe"**. Those in the **"Severe"** state may have a certain **mortality** rate.
+   - **Recovered**: an individual who has recovered from COVID-19 will not get infected again.
 ![alt finite-state-machine](./images/finite-state-machine.png)
 
-##### Agent Schedule 
-Agent object maintain a 
+- **Agent Schedule** 
+The agent maintains a schedule object which is a list of events. It can map from time to activity. 
+The scheduling interval is one hour. Each agent can only have one activity within the time interval.
+
+For future extension: we can include attributes such as age and underlying health condition to model the virus contraction rate and mortality rate.
 
 #### Event Model
+To simplify social interaction, we only consider two scenarios:
+   - meeting other people (with social event)
+   - stay alone (without social event, i.e. quarantine)
 
+For future extension: we can extend event class to differentiate social events from different social network models and virus contraction rates such as public transportation events, class events, and dining events.
 
 #### Predefine Model Constraints
 1. The number of the population remains constant. The model simulates the pandemic in such a short period that births and deaths (other than deaths caused by the COVID 19) can be neglected.
@@ -101,39 +109,31 @@ Agent object maintain a
 3. People who contact with infected individuals may get infected with a contraction rate. The contraction rate is diffrent in different wellness state.
 4. COVID-19 cannot spread among individuals who are in a quarantine state.
 5. The incubation period is typically around 5 days but may range from 1 to 14 days.
-6. Every individual only has one event each hour.
+6. Every individual only has one event each hour to avoid competition.
 
 
+### Model Implementation
 
 #### Object-Oriented Design
-- Use an array to represent agents. 
-- A global clock whose time step is an hour.
+- Agent and event class is designed for facilitating future extensions to its variants.
+- Use an ajacency matrix(array) to represent agent social network.
+- A global clock whose time interval is an hour.
+- Wellness statu is designed as enumeration type which is open for future extensions
 
-```java
+```
 class Agent {
-    ArrayList<Integer> neighbors;   // Integer is the index
+    Event* schedule = new Event[100];   // can index activity using timestamp
+    enum wellness;
 }
 
-Agent[] network = new Agent[1000000];
+Agent* network = new Agent[1000000];  // a representation of social network using adjacency matrix 
+
+class Event {
+    Time timestamp;
+    Agent* paticipants;
+    
+}
 ```
-- Variants of the agents.
-- Social network (graph, neighbors).
-- Schedule (a list of events to do). In an hour, an agent will have only one event.
-    1. Person A state: exposed, Person B state: mild
-    2. At 8:00 AM, A and B had a meeting. A got infected.
-    3. A.nextState = presymtomatic
-    4. At 8:59 AM, update the state of A and the state of B.
-    5. A.state = presymtomatic, B.state = mild.
-- Current status: susceptible, exposed, presymptomatic, asymptomatic, mild, severe and dead.
-
-#### Events
-Events currently we :
-meetings(more than )
- 1000 agent - 1000 slot 
-
-- The time step is an hour. In an hour, an agent will have only one event.
-- Every hour, the agent's state may transit.
-- Based Class Event, subClass: meeting, social interactions, courses.
 
 #### Parallel Computing Technology
 - C++ and OpenMP/CUDA. (Try OpenMP first)
@@ -143,12 +143,14 @@ meetings(more than )
 #### Main Flow
 ```
 Initialize the network.
+Initialize the agent and its initial wellness state.
+Initialize the schedule for each agent.
 
 global clock = 00:00, day 1
-global DURATION = 10 days
+global DURATION = 20 days
 
 Loop:
-    Every agent does one thing (if any) in parallel.
+    Every agent retrieves its current event (if any) in parallel.
     // threads join here
 
     Every agent updates the state in parallel.
@@ -156,9 +158,19 @@ Loop:
 
     clock = clock + 1 hour
 
-until the end of the 10 days
+    if pass 24 hours:
+      Calculate statistic in parallel;
+      Output statistic.
+      
+until the end of the 20 days
 ```
-
+- Example of inside a loop:
+    1. Person A state: susceptible, Person B state: mild
+    2. At 8:00 AM, A and B had a meeting. A got infected.
+    3. A.nextState = exposed
+    4. At 8:59 AM, update the state of A and the state of B.
+    5. A.state = exposed, B.state = mild.
+    
 #### The change of infection rate 
 TODO
 
