@@ -76,11 +76,10 @@ The traditional network-based SIR model assumes a 'homogeneous mixing', which me
 In this project, we adopt a social network model instead, to depict the social connection between members. Define social network as a graph G(V, E), each node V denotes an agent, each edge E denotes the direct social connection between two agents. Meanwhile, we can represent this graph using the adjacency matrix, as well as calculate the shortest path between two nodes and its distance Dmin(Vi, Vj).  
 
 The probability of one-on-one interaction :
-
-P{ Agent i interact with Agent j } =   
-                                       δ/Dmin(Vi, Vj)  when Dmin(Vi, Vj) != ∞
+```
+P{ Agent i interact with Agent j } =   δ/Dmin(Vi, Vj)  when Dmin(Vi, Vj) != ∞
                                        ρ               when Dmin(Vi, Vj)  = ∞
-                                       
+```
 Two individuals with closer proximity in the graph have a higher encounter probability, contrarily individuals with no direct or indirect connection have a low probability of meeting. We can use this as an reference to model the interaction and generate the social events.
 
 #### Agent Model
