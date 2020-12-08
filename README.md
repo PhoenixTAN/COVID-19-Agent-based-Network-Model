@@ -1,6 +1,10 @@
 # COVID-19-Agent-based-Network-Model
 
-The purpose of this project is to build a working computer simulation of the COVID-19 pandemic using parallel programming.
+## Introduction
+The COVID-19 virus has been spreading rapidly throughout the world. At a time that no reliable vaccine or effective treatment has been developed, mathematic models and computer simulation can help us to better understand the spread of the disease, as well as give insights into how to take precise and effective precaution measures to control the spreading.
+ 
+The purpose of this project is to build a program that simulates COVID-19 transmission in a population, using parallel programming techniques. The output of the project is an estimation and representation of the workings of contagion, recovery, and death in the pandemic.
+
 ## Team B
 Tech lead: Ziqi Tan
 
@@ -28,6 +32,7 @@ Tech lead: Ziqi Tan
 - **Asymptomatic carrier** (healthy carrier or just **carrier**): a person or other organism that has become infected with a pathogen, but that displays no signs or symptoms.
 - **Pathogen**: any organism that can produce disease.
 - **Incubation period** is the time elapsed between exposure to a pathogenic organism, a chemical, or radiation, and when symptoms and signs are first apparent.
+
 ## System Model
 
 We are going to use **an agent-based network model** to simulate the process and outcome of the spread of the COVID-19. Our COVID-19 model is based on the SIR model (Susceptible, Infectious, Recovered), which will be briefly discussed first. Then, 
@@ -71,10 +76,12 @@ The traditional network-based SIR model assumes a 'homogeneous mixing', which me
 In this project, we adopt a social network model instead, to depict the social connection between members. Define social network as a graph G(V, E), each node V denotes an agent, each edge E denotes the direct social connection between two agents. Meanwhile, we can represent this graph using the adjacency matrix, as well as calculate the shortest path between two nodes and its distance Dmin(Vi, Vj).  
 
 The probability of one-on-one interaction :
+
 P{ Agent i interact with Agent j } =   δ/Dmin(Vi, Vj)  when Dmin(Vi, Vj) != ∞
+
                                        ρ               when Dmin(Vi, Vj)  = ∞
                                        
-Two individuals with closer proximity in the graph have a higher encounter probability, contrarily individuals with no direct or indirect connection have a low probability of meeting. We can use this to model the interaction and generate the social events.
+Two individuals with closer proximity in the graph have a higher encounter probability, contrarily individuals with no direct or indirect connection have a low probability of meeting. We can use this as an reference to model the interaction and generate the social events.
 
 #### Agent Model
 We use the term 'agent' to describe an individual. An agent should maintain a wellness state and a schedule table.
@@ -91,8 +98,7 @@ There are different states under the Covid-19 pandemic as follow:
 ![alt finite-state-machine](./images/finite-state-machine.png)
 
 - **Agent Schedule** 
-The agent maintains a schedule object which is a list of events. It can map from time to activity. 
-The scheduling interval is one hour. Each agent can only have one activity within the time interval.
+The agent maintains a schedule object which is a list of events and it can map from time to activity. The scheduling interval is one hour. Each agent can only have one activity within the time interval.
 
 For future extension: we can include attributes such as age and underlying health condition to model the virus contraction rate and mortality rate.
 
