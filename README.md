@@ -77,8 +77,8 @@ In this project, we adopt a social network model instead, to depict the social c
 
 The probability of one-on-one interaction :
 
-P{ Agent i interact with Agent j } =   δ/Dmin(Vi, Vj)  when Dmin(Vi, Vj) != ∞
-
+P{ Agent i interact with Agent j } =   
+                                       δ/Dmin(Vi, Vj)  when Dmin(Vi, Vj) != ∞
                                        ρ               when Dmin(Vi, Vj)  = ∞
                                        
 Two individuals with closer proximity in the graph have a higher encounter probability, contrarily individuals with no direct or indirect connection have a low probability of meeting. We can use this as an reference to model the interaction and generate the social events.
