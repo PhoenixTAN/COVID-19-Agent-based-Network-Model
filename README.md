@@ -28,43 +28,33 @@ Tech lead: Ziqi Tan
 - Do not go shopping for ready-made, specialized libraries and software packages designed for the simulation of epidemics.  Instead, build your simulation and your implementation from the ground up.
 
 ## Epidemiology Terms
-- **Susceptible** individual: a member of a population who is at risk of becoming infected by a disease.
-- **Asymptomatic carrier** (healthy carrier or just **carrier**): a person or other organism that has become infected with a pathogen, but that displays no signs or symptoms.
-- **Pathogen**: any organism that can produce disease.
-- **Incubation period** is the time elapsed between exposure to a pathogenic organism, a chemical, or radiation, and when symptoms and signs are first apparent.
+-**Social network**: a network(graph) that depict the social connection between individuals in a population
+-**Agent**: a member of a population in the social network.
+-**Susceptible individual**: a member of a population who is health but could be infected by the virus.
+-**Infected individual**: a member of a population who has been exposed to the virus, no matter the individual shows any symptom or not. The infected status persists throughout the whole disease cycle unless the individual is recovered or dead.
+-**Incubation period**: the time elapsed between exposure to virus, and when symptoms and signs are first apparent.
+-**Event**: the activity of a individual
 
 ## System Model
-
-We are going to use **an agent-based network model** to simulate the process and outcome of the spread of the COVID-19. Our COVID-19 model is based on the SIR model (Susceptible, Infectious, Recovered), which will be briefly discussed first. Then, 
+We are referencing an **agent-based network model** to simulate the process and outcome of the spread of the COVID-19. Our COVID-19 model is based on the traditional SIR model (Susceptible, Infectious, Recovered).
 
 ### Basic SIR Model
-
 - **Susceptible**: The number of susceptible individuals. 
 - **Infectious**: The number of infectious individuals.
 - **Recovered**: The number of removed (and immune) or deceased individuals.
 
 To represent that the number of susceptible, infectious and removed individuals may vary over time (even if the total population size remains constant), we make the precise numbers a function of t (time): S(t), I(t) and R(t). We use the following ordinary differential equations to describe this process.
+```
+dS(t)/dt = - alpha S(t) I(t)
 
-$$
-\frac{dS(t)}{dt} = -\alpha S(t) I(t)
-$$
+dI(t)/dt = alpha S(t) I(t) - beta I(t)
 
-$$
-\frac{dI(t)}{dt} = \alpha S(t) I(t) - \beta I(t)
-$$
+dR(t)/dt = beta I(t)
 
-$$
-\frac{dR(t)}{dt} = \beta I(t)
-$$
+0 < alpha < 1 
 
-$$
-0 < \alpha < 1 
-$$
-
-$$
-0 < \beta < 1
-$$
-
+0 < beta < 1
+```
 where alpha is the transmission rate and beta is the recover rate.
 
 
@@ -107,6 +97,25 @@ To simplify social interaction, we only consider two scenarios:
    - stay alone (without social event, i.e. quarantine)
 
 For future extension: we can extend event class to differentiate social events from different social network models and virus contraction rates such as public transportation events, class events, and dining events.
+
+#### Model factors
+Inorder to simulate the workings of the disease in the population network, we need to model the following factors.
+- **contractin rate**: an infected individual under different wellness states has different probabilities to infect a susceptible individual. To simplify the problem, we predefine the probability. For example, a susceptible agent i has an encounter with a mild symptom agent j:
+```
+P{ i get infect when agent j state is mild} = a
+P{ i get infect when agent j state is server} = b
+```
+if the interaction involves more than two individuals, then the probability of agent i get infected is:
+```
+P = 1-(1-a)(1-a)(1-b)...(1-c)
+```
+
+- **wellness state transmission probability**: the probability of an infected individulal's current wellness state move to the next state, including recovery rate and mortality rate. For example, agent i under the state of **exposed** then,
+```
+P( Presymptomatic| exposed) = p
+P( Asymptomatic| exposed) = q
+p + q =1
+```
 
 #### Predefine Model Constraints
 1. The number of the population remains constant. The model simulates the pandemic in such a short period that births and deaths (other than deaths caused by the COVID 19) can be neglected.
