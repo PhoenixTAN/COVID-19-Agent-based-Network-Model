@@ -14,16 +14,17 @@
 class Agent
 {
 private:
-    int number;
+    int id;
     int wellness;
     int nextState;
     std::vector<Agent> neigbhours;
 public:
     Agent(int number); // construction function
-    int getNumber();
+    int getId();
     int getWellness();
     int getNextState();
-    // todo:event
+    // todo: getEvent
+    // todo: setEvent
     void executeEvent();
     void updateWellness();
     std::vector<Agent> getNeigbhours();

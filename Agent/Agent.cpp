@@ -8,16 +8,16 @@
 #include "Agent.hpp"
 #include "Enum.hpp"
 
-Agent::Agent(int number)
+Agent::Agent(int id)
 {
-    this->number = number;
+    this->id = id;
     this->wellness = SUSCEPTIBLE;
     this->nextState = -1;
 };
 
-int Agent::getNumber()
+int Agent::getId()
 {
-    return this->number;
+    return this->id;
 };
 
 int Agent::getWellness()
