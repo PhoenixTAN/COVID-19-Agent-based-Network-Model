@@ -5,6 +5,6 @@
 
 class NonTransmissionEvent : public Event{
 public:
-  NonTransmissionEvent(std::string Name, uint32_t size);
+  NonTransmissionEvent();
 };
 #endif

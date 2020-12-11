@@ -5,6 +5,6 @@
 
 class StayAlone : public NonTransmissionEvent{
 public:
-  StayAlone(std::string Name, uint32_t Size);
+  StayAlone();
 };
 #endif

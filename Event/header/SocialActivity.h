@@ -5,6 +5,6 @@
 
 class SocialActivity : public TransmissionEvent{
 public:
-  SocialActivity(std::string Name, uint32_t Size);
+  SocialActivity();
 };
 #endif

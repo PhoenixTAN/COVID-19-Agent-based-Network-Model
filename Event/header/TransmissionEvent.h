@@ -5,6 +5,6 @@
 
 class TransmissionEvent : public Event{
 public:
-  TransmissionEvent(std::string Name, uint32_t size);
+  TransmissionEvent();
 };
 #endif

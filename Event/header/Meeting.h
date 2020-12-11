@@ -5,6 +5,6 @@
 
 class Meeting : public TransmissionEvent{
 public:
-  Meeting(std::string Name, uint32_t Size);
+  Meeting();
 };
 #endif
