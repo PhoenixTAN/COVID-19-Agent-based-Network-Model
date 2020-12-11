@@ -2,6 +2,15 @@
 #ifndef EVENT_H
 #define EVENT_H
 
+// P{ i get infect when agent j state is mild} = a
+const static float INFECTION_RATE_A = 0.3;
+// P{ i get infect when agent j state is severe} = b
+const static float INFECTION_RATE_B = 0.3;
+// P{ i get infect when agent j state is presymptomatic} = c
+const static float INFECTION_RATE_C = 0.4;
+// P{ i get infect when agent j state is asymptomatic} = d
+const static float INFECTION_RATE_D = 0.4;
+
 class Event {
 public:
   //getters

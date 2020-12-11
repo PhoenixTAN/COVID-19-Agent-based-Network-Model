@@ -7,6 +7,10 @@
 
 #include "Agent.hpp"
 #include "Enum.hpp"
+#include "..\Event\header\Event.h"
+#include "..\Event\header\TransmissionEvent.h"
+#include "..\Event\header\NonTransmissionEvent.h"
+#include <ctime>
 
 Agent::Agent(int id)
 {
@@ -32,8 +36,64 @@ int Agent::getNextState()
 
 void Agent::executeEvent()
 {
-    
-}
+    srand(time(NULL));
+    float probability = rand();
+    if(TransmissionEvent* te = dynamic_cast<TransmissionEvent*>(this->event) && this->wellness == SUSCEPTIBLE) {
+        float infected_probability = 1.0;
+        float temp = 1.0;
+        for(int i = 0; i < this->event.Mild; i++)
+            temp *= 1.0 - INFECTION_RATE_A;
+        for(int i = 0; i < this->event.Severe; i++)
+            temp *= 1.0 - INFECTION_RATE_B;
+        for(int i = 0; i < this->event.Presymptomatic; i++)
+            temp *= 1.0 - INFECTION_RATE_C;
+        for(int i = 0; i < this->event.Asymptomatic; i++)
+            temp *= 1.0 - INFECTION_RATE_D;
+        infected_probability -= temp;
+        if(probability <= infected_probability) {
+            probability = rand();
+            if (probability <= INFECTIOUS_TO_ASYMPTOMATIC)
+                this->setNextState(ASYMPTOMATIC);
+            else if(probability <= INFECTIOUS_TO_ASYMPTOMATIC + INFECTIOUS_TO_PRESYMPTOMATIC)
+                this->setNextState(PRESYMPTOMATIC);
+        }
+    }else{
+        if(this->wellness == PRESYMPTOMATIC) {
+            if(probability <= PRESYMPTOMATIC_TO_MILD)
+                this->setNextState(MILD);
+        }else if(this->wellness == ASYMPTOMATIC) {
+            if(probability <= ASYMPTOMATIC_TO_RECOVERED)
+                this->setNextState(RECOVERED);
+        }else if(this->wellness == MILD) {
+            if(probability <= MILD_TO_SEVERE)
+                this->setNextState(SEVERE);
+            else if(probability <= MILD_TO_RECOVERED + MILD_TO_SEVERE)
+                this->setNextState(RECOVERED);
+        }else if(this->wellness == SEVERE) {
+            if(this->wellness <= SEVERE_TO_DEAD)
+                this->setNextState(DEAD);
+            else if(this->wellness <= SEVERE_TO_RECOVER + SEVERE_TO_DEAD)
+                this->setNextState(RECOVERED);
+            else if(this->wellness <= SEVERE_TO_RECOVERED + SEVERE_TO_DEAD + SEVERE_TO_MILD)
+                this->setNextState(MILD);
+        }
+    }
+};
+
+void Agent::setNextState(int nextState)
+{
+    this->nextState = nextState;
+};
+
+Event Agent::getEvent()
+{
+    return this->event;
+};
+
+void Agent::setEvent(Event event)
+{
+    this->event = event;
+};
 
 void Agent::updateWellness()
 {
@@ -43,7 +103,7 @@ void Agent::updateWellness()
     }
 };
 
-std::vector<Agent> Agent::getNeigbhours()
+std::vector<Agent> Agent::getNeighbors()
 {
-    return this->neigbhours;
+    return this->neighbors;
 };
