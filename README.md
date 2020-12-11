@@ -64,7 +64,6 @@ where alpha is the transmission rate and beta is the recover rate.
 #### Social Network Model
 The traditional network-based SIR model assumes a 'homogeneous mixing', which means that any pair of members are equally like to interact with each other. In this project, We adopt **Barabási–Albert (BA) algorithm** to generate a social network model.
 
-
 ```
 class Agent {
     Event nextEvent;
@@ -108,10 +107,12 @@ The agent maintains a schedule object which is a list of events and it can map f
 For future extension: we can include attributes such as age and underlying health condition to model the virus contraction rate and mortality rate.
 
 #### Event Model
-To simplify social interaction, we only consider two scenarios:
+To simplify social interaction, we only consider three scenarios:
    - Meeting other people (only with the neighbors)
    - Social activities (may contact anyone, not only the neighbors)
    - Stay alone (without social event, i.e. quarantine)
+
+![alt text](./images/event-ood.png)
 
 For future extension: we can extend event class to differentiate social events from different social network models and virus contraction rates such as public transportation events, class events, and dining events.
 
@@ -157,15 +158,18 @@ p + q = 1
 ```
 class Agent {
     Event nextEvent;
-    timestamp;  // TBDd
+    timestamp;  // TBD
     enum wellness;
 }
 
 class Event {
-    Time timestamp;
-    Agent* participants;
-    bool contagious;
-    int numOfSus
+    int num_of_susceptible;
+    int num_of_presymptomatic;
+    int num_of_asymptomatic;
+    int num_of_mild;
+    int num_of_severe;
+    int num_of_recovered;
+    int num_of_dead;
 }
 ```
 

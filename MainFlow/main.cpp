@@ -38,9 +38,10 @@ int main() {
 
         /* Every agent updates the state in parallel */
 
+        /* barrier */
 
         /* statistics */
-        
+
     }
 
 }
