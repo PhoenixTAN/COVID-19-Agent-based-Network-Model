@@ -44,6 +44,7 @@ We are referencing an **agent-based network model** to simulate the process and 
 - **Recovered**: The number of removed (and immune) or deceased individuals.
 
 To represent that the number of susceptible, infectious and removed individuals may vary over time (even if the total population size remains constant), we make the precise numbers a function of t (time): S(t), I(t) and R(t). We use the following ordinary differential equations to describe this process.
+
 ```
 dS(t)/dt = - alpha S(t) I(t)
 
@@ -61,9 +62,8 @@ where alpha is the transmission rate and beta is the recover rate.
 ### COVID-19 Pandemic Model
 
 #### Social Network Model
-The traditional network-based SIR model assumes a 'homogeneous mixing', which means that any pair of members are equally like to interact with each other. This model deviates from the real-life situation because human interaction is constrained under different circumstances. 
+The traditional network-based SIR model assumes a 'homogeneous mixing', which means that any pair of members are equally like to interact with each other. In this project, We adopt **Barabási–Albert (BA) algorithm** to generate a social network model.
 
-In this project, we adopt a social network model instead, to depict the social connection between members. 
 
 ```
 class Agent {
@@ -76,6 +76,17 @@ class Agent {
 Agent* network = new Agent[1000000];  
 ```
 
+**Barabási–Albert (BA) algorithm**
+
+1. Randomly initialize part of the network.
+
+2. New nodes are added to the network one at a time. Each new node is connected to existing nodes with a probability that is proportional to the number of links that the existing nodes already have.
+3. Formally, the probability pi that the new node is connected to node i is
+
+```
+pi = ki / sum(kj)
+```
+where ki is the degree of node i and the sum is made over all pre-existing nodes j (i.e. the denominator results in twice the current number of edges in the network). 
 
 #### Agent Model
 We use the term 'agent' to describe an individual. An agent should maintain a wellness state and a schedule table.
@@ -110,16 +121,18 @@ In order to simulate the workings of the disease in the population network, we n
 ```
 P{ i get infect when agent j state is mild} = a
 P{ i get infect when agent j state is severe} = b
+P{ i get infect when agent j state is presymptomatic} = c
+P{ i get infect when agent j state is asymptomatic} = d
 ```
-if the interaction involves more than two individuals, then the probability of agent i get infected is:
+if the interaction involves more than two individuals, then the probability of agent i get infected when meeting with n people is:
 ```
-P = 1-(1-a)(1-a)(1-b)...(1-c)
+P = 1-(1-P1)(1-P2)(1-P3)(1-P4)...(1-Pn)
 ```
 
-- **wellness state transmission probability**: the probability of an infected individual's current wellness state move to the next state, including recovery rate and mortality rate. For example, agent i under the state of **susceptible** then,
+- **Wellness state transmission probability**: the probability of an infected individual's current wellness state move to the next state, including recovery rate and mortality rate. For example, agent i under the state of **susceptible** then,
 ```
-P( Presymptomatic| susceptible ) = p
-P( Asymptomatic| susceptible ) = q
+P( Presymptomatic | susceptible ) = p
+P( Asymptomatic | susceptible ) = q
 p + q = 1
 ```
 
@@ -129,7 +142,7 @@ p + q = 1
 3. People who contact with infected individuals may get infected with a contraction rate. The contraction rate varies in different wellness state.
 4. COVID-19 cannot spread among individuals who are in a quarantine state.
 5. The incubation period is typically around 5 days but may range from 1 to 14 days.
-6. For simplicity, every individual only has one event each hour to race condition.
+6. For simplicity, every individual only has one event each day to race condition.
 
 
 ### Model Implementation
@@ -137,14 +150,14 @@ p + q = 1
 #### Object-Oriented Design
 - Agent and event class is designed for facilitating future extensions to its variants.
 - Use an adjacency matrix(array) to represent agent social network.
-- A global clock whose time interval is an hour.
+- A global clock whose time interval is a day.
 - Wellness status is designed as enumeration type which is open for future extensions
 
 
 ```
 class Agent {
     Event nextEvent;
-    timestamp;
+    timestamp;  // TBDd
     enum wellness;
 }
 
@@ -152,6 +165,7 @@ class Event {
     Time timestamp;
     Agent* participants;
     bool contagious;
+    int numOfSus
 }
 ```
 
@@ -163,12 +177,13 @@ class Event {
 ```
 Initialize the network.
 Initialize the agent and its initial wellness state.
-Initialize an event for each agent.
 
-global clock = 00:00, day 1
-global DURATION = 20 days
+global clock = day 1
+global DURATION = 300 days
 
 Loop:
+    Generate an event for each agent.
+
     Every agent retrieves its current event (if any) in parallel.
     // threads join here
 
@@ -178,13 +193,12 @@ Loop:
     Generate an event for each agent for the next following hour
     // sequentially
 
-    clock = clock + 1 hour
+    clock = clock + 1 day
 
-    if pass 24 hours:
-      Calculate statistic in parallel;
-      Output statistic.
+    Calculate statistic in parallel;
+    Output statistic.
       
-until the end of the 20 days
+until the end of the DURATION
 ```
 - Example of inside a loop:
     1. Person A state: susceptible, Person B state: mild
@@ -203,8 +217,6 @@ TODO
 
 ## Statistic
 Statistics and plots.
-
-## Test
 
 ## Collaboration
 
@@ -228,3 +240,5 @@ The **Bold name** is the name of the person in charge.
 [3] Systems Sciences at SIS, A networked SIR model, http://systems-sciences.uni-graz.at/etextbook/networks/sirnetwork.html
 
 [4] Wikipedia, COVID-19 pandemic
+
+[5] Wikipedia, Barabási–Albert model
