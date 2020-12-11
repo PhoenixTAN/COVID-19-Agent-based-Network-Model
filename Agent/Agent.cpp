@@ -58,24 +58,35 @@ void Agent::executeEvent()
                 this->setNextState(PRESYMPTOMATIC);
         }
     }else{
-        if(this->wellness == PRESYMPTOMATIC) {
-            if(probability <= PRESYMPTOMATIC_TO_MILD)
-                this->setNextState(MILD);
-        }else if(this->wellness == ASYMPTOMATIC) {
-            if(probability <= ASYMPTOMATIC_TO_RECOVERED)
-                this->setNextState(RECOVERED);
-        }else if(this->wellness == MILD) {
-            if(probability <= MILD_TO_SEVERE)
-                this->setNextState(SEVERE);
-            else if(probability <= MILD_TO_RECOVERED + MILD_TO_SEVERE)
-                this->setNextState(RECOVERED);
-        }else if(this->wellness == SEVERE) {
-            if(this->wellness <= SEVERE_TO_DEAD)
-                this->setNextState(DEAD);
-            else if(this->wellness <= SEVERE_TO_RECOVER + SEVERE_TO_DEAD)
-                this->setNextState(RECOVERED);
-            else if(this->wellness <= SEVERE_TO_RECOVERED + SEVERE_TO_DEAD + SEVERE_TO_MILD)
-                this->setNextState(MILD);
+        switch (this->wellness) {
+            case PRESYMPTOMATIC:
+                if (probability <= PRESYMPTOMATIC_TO_MILD) {
+                    this->setNextState(MILD);
+                }
+                break;
+            case ASYMPTOMATIC:
+                if(probability <= ASYMPTOMATIC_TO_RECOVERED){
+                    this->setNextState(RECOVERED);
+                }
+                break;
+            case MILD:
+                if(probability <= MILD_TO_SEVERE){
+                    this->setNextState(SEVERE);
+                }else if(probability <= MILD_TO_RECOVERED + MILD_TO_SEVERE){
+                    this->setNextState(RECOVERED);
+                }
+                break;
+            case SEVERE:
+                if(probability <= SEVERE_TO_DEAD){
+                    this->setNextState(DEAD);
+                }else if(probability <= SEVERE_TO_RECOVERED + SEVERE_TO_DEAD){
+                    this->setNextState(RECOVERED);
+                }else if(probability <= SEVERE_TO_RECOVERED + SEVERE_TO_DEAD + SEVERE_TO_MILD){
+                    this->setNextState(MILD);
+                }
+                break;
+            default:
+                break;
         }
     }
 };
