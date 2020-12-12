@@ -14,6 +14,7 @@
 
 #include <cmath>
 #include <ctime>
+#include <typeinfo>
 
 Agent::Agent(int id)
 {
@@ -41,7 +42,8 @@ void Agent::executeEvent()
 {
     srand(RANDOM_SEED);
     float probability = rand();
-    if(TransmissionEvent* te = dynamic_cast<TransmissionEvent*>(this->event) && this->wellness == SUSCEPTIBLE) {
+    // transmission event, if you would be infected
+    if(typeid(TransmissionEvent) == typeid(this->event) && this->wellness == SUSCEPTIBLE) {
         float infectedProbability = 1.0;
         float temp = 1.0;
         
@@ -56,12 +58,13 @@ void Agent::executeEvent()
             probability = rand();
             if (probability <= INFECTIOUS_TO_ASYMPTOMATIC) {
                 this->setNextState(ASYMPTOMATIC);
-            } else if (probability <= INFECTIOUS_TO_ASYMPTOMATIC + INFECTIOUS_TO_PRESYMPTOMATIC) {
+            } else {
                 this->setNextState(PRESYMPTOMATIC);
             }
         }
 
-    }else{
+    }else{ 
+        // non transmission event 
         switch (this->wellness) {
             case PRESYMPTOMATIC:
                 if (probability <= PRESYMPTOMATIC_TO_MILD) {
@@ -85,8 +88,6 @@ void Agent::executeEvent()
                     this->setNextState(DEAD);
                 }else if (probability <= SEVERE_TO_RECOVERED + SEVERE_TO_DEAD){
                     this->setNextState(RECOVERED);
-                }else if (probability <= SEVERE_TO_RECOVERED + SEVERE_TO_DEAD + SEVERE_TO_MILD){
-                    this->setNextState(MILD);
                 }
                 break;
             default:
