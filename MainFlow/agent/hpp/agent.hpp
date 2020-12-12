@@ -35,6 +35,7 @@ public:
     void updateWellness();
     std::vector<Agent*> getNeighbors();
     void addNeighbor(Agent* agent);
+    bool hasNeighbor(int neighborId);
 };
 
 #endif /* Agent_hpp */

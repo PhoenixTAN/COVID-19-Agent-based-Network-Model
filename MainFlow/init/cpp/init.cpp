@@ -28,7 +28,7 @@ void init_network(Agent* network, int NETWORK_SIZE) {
             // flip coin
             float coin = rand() / (float)(RAND_MAX);
 
-            if ( coin < PROBABILITY_OF_CONNECTION ) {
+            if ( coin < PROBABILITY_OF_CONNECTION && !network[i].hasNeighbor(network[j].getId()) ) {
                 network[i].addNeighbor(&network[j]);
                 network[j].addNeighbor(&network[i]);
             }
@@ -45,11 +45,11 @@ void init_network(Agent* network, int NETWORK_SIZE) {
             }
 
             /* the probability of that agent i join agent j's network */
-            /* avoid dividing zero */
-            float probabilityToJoin = 1.0 / (network[j].getNeighbors().size() + 1);
+            /* avoid dividing zero and one */
+            float probabilityToJoin = 1.0 / (network[j].getNeighbors().size() + 2);
             float coin = rand() / float(RAND_MAX);
 
-            if ( coin < probabilityToJoin ) {
+            if ( coin < probabilityToJoin && !network[i].hasNeighbor(network[j].getId()) ) {
                 network[i].addNeighbor(&network[j]);
                 network[j].addNeighbor(&network[i]);
             }

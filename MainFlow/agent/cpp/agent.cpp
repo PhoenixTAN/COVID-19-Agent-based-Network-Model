@@ -136,3 +136,12 @@ std::vector<Agent*> Agent::getNeighbors()
 void Agent::addNeighbor(Agent* agent) {
     this->neighbors.push_back(agent);
 }
+
+bool Agent::hasNeighbor(int neighborId) {
+    for ( int i = 0; i < this->neighbors.size(); i++ ) {
+        if ( neighbors[i]->getId() == neighborId ) {
+            return true;
+        }
+    }
+    return false;
+}
