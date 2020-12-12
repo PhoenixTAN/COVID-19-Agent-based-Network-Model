@@ -11,6 +11,10 @@ int main() {
 
     /* initialize the agents */
 
+    
+
+    /* initialize the events */
+
 
     for ( ; days < SIMULATION_DAYS; days++ ) {
         /* generate an event for each agent for today */

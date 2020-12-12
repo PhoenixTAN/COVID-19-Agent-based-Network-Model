@@ -6,11 +6,11 @@
 //
 
 #include "..\hpp\agent.hpp"
-#include "..\hpp\enum.hpp"
-#include "..\..\Event\hpp\event.h"
-#include "..\..\Event\hpp\transmission_event.h"
-#include "..\..\Event\hpp\non_transmission_event.h"
-#include "..\params.hpp"
+#include "..\hpp\wellness.hpp"
+#include "..\..\event\hpp\event.h"
+#include "..\..\event\hpp\transmission_event.h"
+#include "..\..\event\hpp\non_transmission_event.h"
+#include "..\..\params.hpp"
 
 #include <cmath>
 #include <ctime>
@@ -51,13 +51,16 @@ void Agent::executeEvent()
         temp *= pow(1.0 - INFECTION_RATE_MILD, this->event.getNumOfAsymptomatic());
 
         infectedProbability -= temp;
-        if(probability <= infectedProbability) {
+
+        if (probability <= infectedProbability) {
             probability = rand();
-            if (probability <= INFECTIOUS_TO_ASYMPTOMATIC)
+            if (probability <= INFECTIOUS_TO_ASYMPTOMATIC) {
                 this->setNextState(ASYMPTOMATIC);
-            else if(probability <= INFECTIOUS_TO_ASYMPTOMATIC + INFECTIOUS_TO_PRESYMPTOMATIC)
+            } else if (probability <= INFECTIOUS_TO_ASYMPTOMATIC + INFECTIOUS_TO_PRESYMPTOMATIC) {
                 this->setNextState(PRESYMPTOMATIC);
+            }
         }
+
     }else{
         switch (this->wellness) {
             case PRESYMPTOMATIC:
@@ -66,23 +69,23 @@ void Agent::executeEvent()
                 }
                 break;
             case ASYMPTOMATIC:
-                if(probability <= ASYMPTOMATIC_TO_RECOVERED){
+                if (probability <= ASYMPTOMATIC_TO_RECOVERED){
                     this->setNextState(RECOVERED);
                 }
                 break;
             case MILD:
-                if(probability <= MILD_TO_SEVERE){
+                if (probability <= MILD_TO_SEVERE){
                     this->setNextState(SEVERE);
-                }else if(probability <= MILD_TO_RECOVERED + MILD_TO_SEVERE){
+                }else if (probability <= MILD_TO_RECOVERED + MILD_TO_SEVERE){
                     this->setNextState(RECOVERED);
                 }
                 break;
             case SEVERE:
-                if(probability <= SEVERE_TO_DEAD){
+                if (probability <= SEVERE_TO_DEAD){
                     this->setNextState(DEAD);
-                }else if(probability <= SEVERE_TO_RECOVERED + SEVERE_TO_DEAD){
+                }else if (probability <= SEVERE_TO_RECOVERED + SEVERE_TO_DEAD){
                     this->setNextState(RECOVERED);
-                }else if(probability <= SEVERE_TO_RECOVERED + SEVERE_TO_DEAD + SEVERE_TO_MILD){
+                }else if (probability <= SEVERE_TO_RECOVERED + SEVERE_TO_DEAD + SEVERE_TO_MILD){
                     this->setNextState(MILD);
                 }
                 break;
