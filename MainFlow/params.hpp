@@ -6,6 +6,7 @@
 const static int RANDOM_SEED = 1;
 
 const static int SIMULATION_DAYS = 90;
+const static int NETWORK_SIZE = 100;
 
 /* the probability of transfering from susceptible to presymptomatic 
 if get infected */

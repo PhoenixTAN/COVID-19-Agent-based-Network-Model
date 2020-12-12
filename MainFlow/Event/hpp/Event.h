@@ -32,5 +32,8 @@ private:
   int numOfRecovered;
   int numOfSevere;
   int numOfDead;
+
+  virtual void poly();
+
 };
 #endif

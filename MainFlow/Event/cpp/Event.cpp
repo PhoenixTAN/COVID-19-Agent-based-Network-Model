@@ -45,3 +45,5 @@ void Event::setNumOfSevere(int numOfSevere) {
 void Event::setNumOfDead(int numOfDead) {
   this->numOfDead = numOfDead;
 }
+
+void poly () {}

@@ -1,5 +1,5 @@
-#include <string>
 #include "event.h"
+
 #ifndef TRANSMISSIONEVENT_H
 #define TRANSMISSIONEVENT_H
 

@@ -21,7 +21,8 @@ private:
     Event event;
     std::vector<Agent> neighbors;
 public:
-    Agent(int number); // construction function
+    Agent(int number); // constructor
+    Agent();    // default constructor
     int getId();
     WELLNESS getWellness();
     WELLNESS getNextState();

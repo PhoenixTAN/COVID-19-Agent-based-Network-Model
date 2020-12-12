@@ -1,5 +1,8 @@
 #include <iostream>
 #include "params.hpp"
+#include "Agent/hpp/Agent.hpp"
+#include "Event/hpp/Meeting.hpp"
+#include "init/hpp/init.hpp"
 
 
 /* a global clock */
@@ -8,11 +11,13 @@ static int days = 0;
 int main() {
 
     /* initialize the network */
+    Agent* network = new Agent[NETWORK_SIZE];
+    init_network(network, NETWORK_SIZE);
 
     /* initialize the agents */
-
+    Agent* agent = new Agent(0);
+    agent->setEvent(new Meeting());
     
-
     /* initialize the events */
 
 

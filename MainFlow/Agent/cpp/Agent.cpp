@@ -23,6 +23,12 @@ Agent::Agent(int id)
     this->nextState = INIT;
 };
 
+Agent::Agent() {
+    this->id = 0;
+    this->wellness = SUSCEPTIBLE;
+    this->nextState = INIT;
+}
+
 int Agent::getId()
 {
     return this->id;
@@ -42,8 +48,9 @@ void Agent::executeEvent()
 {
     srand(RANDOM_SEED);
     float probability = rand();
+    Event* e = &(this->event);
     // transmission event, if you would be infected
-    if(typeid(TransmissionEvent) == typeid(this->event) && this->wellness == SUSCEPTIBLE) {
+    if(dynamic_cast<TransmissionEvent*>(&(this->event)) && this->wellness == SUSCEPTIBLE) {
         float infectedProbability = 1.0;
         float temp = 1.0;
         
