@@ -5,18 +5,21 @@
 //  Created by Cayden on 2020/12/10.
 //
 
-#include "Agent.hpp"
-#include "Enum.hpp"
-#include "..\Event\header\Event.h"
-#include "..\Event\header\TransmissionEvent.h"
-#include "..\Event\header\NonTransmissionEvent.h"
+#include "..\hpp\Agent.hpp"
+#include "..\hpp\Enum.hpp"
+#include "..\..\Event\hpp\Event.h"
+#include "..\..\Event\hpp\TransmissionEvent.h"
+#include "..\..\Event\hpp\NonTransmissionEvent.h"
+#include "..\params.hpp"
+
+#include <cmath>
 #include <ctime>
 
 Agent::Agent(int id)
 {
     this->id = id;
     this->wellness = SUSCEPTIBLE;
-    this->nextState = -1;
+    this->nextState = INIT;
 };
 
 int Agent::getId()
@@ -24,12 +27,12 @@ int Agent::getId()
     return this->id;
 };
 
-int Agent::getWellness()
+WELLNESS Agent::getWellness()
 {
     return this->wellness;
 };
 
-int Agent::getNextState()
+WELLNESS Agent::getNextState()
 {
     return this->nextState;
 };
@@ -41,6 +44,8 @@ void Agent::executeEvent()
     if(TransmissionEvent* te = dynamic_cast<TransmissionEvent*>(this->event) && this->wellness == SUSCEPTIBLE) {
         float infected_probability = 1.0;
         float temp = 1.0;
+        
+        pow(1.0 - INFECTION_RATE_MILD, this->event.)
         for(int i = 0; i < this->event.Mild; i++)
             temp *= 1.0 - INFECTION_RATE_A;
         for(int i = 0; i < this->event.Severe; i++)

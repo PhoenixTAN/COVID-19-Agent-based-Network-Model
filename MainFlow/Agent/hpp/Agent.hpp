@@ -7,8 +7,7 @@
 
 #ifndef Agent_hpp
 #define Agent_hpp
-#include "..\Event\header\Event.h"
-#include <stdio.h>
+#include "..\..\Event\hpp\Event.h"
 #include <vector>
 
 /* the probability of transfering from susceptible to presymptomatic
@@ -31,16 +30,16 @@ class Agent
 {
 private:
     int id;
-    int wellness;
-    int nextState;
+    WELLNESS wellness;
+    WELLNESS nextState;
     Event event;
     std::vector<Agent> neighbors;
 public:
     Agent(int number); // construction function
     int getId();
-    int getWellness();
-    int getNextState();
-    void setNextState(int nextState);
+    WELLNESS getWellness();
+    WELLNESS getNextState();
+    void setNextState(WELLNESS nextState);
     Event getEvent();
     void setEvent(Event event);
     void executeEvent();

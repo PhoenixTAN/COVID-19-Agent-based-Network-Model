@@ -8,9 +8,9 @@
 #ifndef Enum_hpp
 #define Enum_hpp
 
-#include <stdio.h>
 enum WELLNESS
 {
+    INIT,
     SUSCEPTIBLE,
     ASYMPTOMATIC,
     PRESYMPTOMATIC,
