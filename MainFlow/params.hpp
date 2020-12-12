@@ -7,6 +7,7 @@ const static unsigned int RANDOM_SEED = 1;
 
 const static int SIMULATION_DAYS = 90;
 const static int NETWORK_SIZE = 100;
+
 static int MAXIMUM_NUM_OF_SOCIAL_EVENT_IN_A_HOUR = NETWORK_SIZE / 10;
 const static int MINIMUM_AGENT_IN_SOCIAL_EVENT = 2;
 
