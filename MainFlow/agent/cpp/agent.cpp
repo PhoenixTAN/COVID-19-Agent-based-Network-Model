@@ -7,9 +7,9 @@
 
 #include "..\hpp\agent.hpp"
 #include "..\hpp\wellness.hpp"
-#include "..\..\event\hpp\event.h"
-#include "..\..\event\hpp\transmission_event.h"
-#include "..\..\event\hpp\non_transmission_event.h"
+#include "..\..\event\hpp\event.hpp"
+#include "..\..\event\hpp\transmission_event.hpp"
+#include "..\..\event\hpp\non_transmission_event.hpp"
 #include "..\..\params.hpp"
 
 #include <cmath>

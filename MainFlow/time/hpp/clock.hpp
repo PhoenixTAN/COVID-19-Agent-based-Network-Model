@@ -5,22 +5,18 @@
 class Clock
 {
 private:
-    Hour* hours;
-    WELLNESS wellness;
-    WELLNESS nextState;
-    Event event;
-    std::vector<Agent> neighbors;
+    static Clock* instance;
+private:
+    HOUR hour;
+    int currentHour;
+    int currentDay;
+    Clock();
+public:     
+    static Clock* getInstance();
 public:
-    Agent(int number); // construction function
-    int getId();
-    WELLNESS getWellness();
-    WELLNESS getNextState();
-    void setNextState(WELLNESS nextState);
-    Event getEvent();
-    void setEvent(Event event);
-    void executeEvent();
-    void updateWellness();
-    std::vector<Agent> getNeighbors();
+    void nextHour();
+    int getCurrentDay();
+    HOUR getCurrentHour();
 };
 
-#endif /* Agent_hpp */
+#endif 

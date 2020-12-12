@@ -1,4 +1,4 @@
-#include "../hpp/meeting.h"
+#include "../hpp/meeting.hpp"
 
 Meeting::Meeting() : TransmissionEvent()
 {}

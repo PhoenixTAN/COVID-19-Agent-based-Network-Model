@@ -1,4 +1,4 @@
-#include "../hpp/event.h"
+#include "../hpp/event.hpp"
 
 // getters
 int Event::getNumOfSusceptible() {
