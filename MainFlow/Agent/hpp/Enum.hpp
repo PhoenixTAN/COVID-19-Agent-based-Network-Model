@@ -5,8 +5,8 @@
 //  Created by Cayden on 2020/12/10.
 //
 
-#ifndef Enum_hpp
-#define Enum_hpp
+#ifndef ENUM_HPP
+#define ENUM_HPP
 
 enum WELLNESS
 {

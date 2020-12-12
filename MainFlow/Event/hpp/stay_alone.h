@@ -1,5 +1,5 @@
 #include <string>
-#include "NonTransmissionEvent.h"
+#include "non_transmission_event.h"
 #ifndef STAYALONE_H
 #define STAYALONE_H
 

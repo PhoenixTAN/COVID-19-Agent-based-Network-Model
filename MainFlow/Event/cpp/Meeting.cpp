@@ -1,5 +1,5 @@
 #include <iostream>
-#include "../header/Meeting.h"
+#include "../hpp/meeting.h"
 
 Meeting::Meeting() : TransmissionEvent()
 {}

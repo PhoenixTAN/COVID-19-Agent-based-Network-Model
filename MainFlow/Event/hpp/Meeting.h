@@ -1,5 +1,5 @@
 #include <string>
-#include "TransmissionEvent.h"
+#include "transmission_event.h"
 #ifndef MEETING_H
 #define MEETING_H
 

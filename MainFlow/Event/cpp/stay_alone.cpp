@@ -1,5 +1,5 @@
 #include <iostream>
 #include <string>
-#include "../header/StayAlone.h"
+#include "../hpp/stay_alone.h"
 
 StayAlone::StayAlone() : NonTransmissionEvent() {}

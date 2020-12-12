@@ -1,5 +1,5 @@
 #include <iostream>
 #include <string>
-#include "../header/SocialActivity.h"
+#include "../hpp/social_activity.h"
 
 SocialActivity::SocialActivity() : TransmissionEvent(){}

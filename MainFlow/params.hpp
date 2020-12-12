@@ -1,4 +1,9 @@
+#ifndef PARAMS_H
+#define PARAMS_H
 
+
+
+const static int RANDOM_SEED = 1;
 
 const static int SIMULATION_DAYS = 90;
 
@@ -24,3 +29,5 @@ const static float INFECTION_RATE_SEVERE = 0.3;
 const static float INFECTION_RATE_PRESYMPTOMATIC = 0.4;
 // P{ i get infect when agent j state is asymptomatic} = d
 const static float INFECTION_RATE_ASYMPTOMATIC = 0.4;
+
+#endif

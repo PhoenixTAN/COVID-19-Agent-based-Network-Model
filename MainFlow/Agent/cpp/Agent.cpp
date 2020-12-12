@@ -5,11 +5,11 @@
 //  Created by Cayden on 2020/12/10.
 //
 
-#include "..\hpp\Agent.hpp"
-#include "..\hpp\Enum.hpp"
-#include "..\..\Event\hpp\Event.h"
-#include "..\..\Event\hpp\TransmissionEvent.h"
-#include "..\..\Event\hpp\NonTransmissionEvent.h"
+#include "..\hpp\agent.hpp"
+#include "..\hpp\enum.hpp"
+#include "..\..\Event\hpp\event.h"
+#include "..\..\Event\hpp\transmission_event.h"
+#include "..\..\Event\hpp\non_transmission_event.h"
 #include "..\params.hpp"
 
 #include <cmath>
@@ -39,23 +39,19 @@ WELLNESS Agent::getNextState()
 
 void Agent::executeEvent()
 {
-    srand(time(NULL));
+    srand(RANDOM_SEED);
     float probability = rand();
     if(TransmissionEvent* te = dynamic_cast<TransmissionEvent*>(this->event) && this->wellness == SUSCEPTIBLE) {
-        float infected_probability = 1.0;
+        float infectedProbability = 1.0;
         float temp = 1.0;
         
-        pow(1.0 - INFECTION_RATE_MILD, this->event.)
-        for(int i = 0; i < this->event.Mild; i++)
-            temp *= 1.0 - INFECTION_RATE_A;
-        for(int i = 0; i < this->event.Severe; i++)
-            temp *= 1.0 - INFECTION_RATE_B;
-        for(int i = 0; i < this->event.Presymptomatic; i++)
-            temp *= 1.0 - INFECTION_RATE_C;
-        for(int i = 0; i < this->event.Asymptomatic; i++)
-            temp *= 1.0 - INFECTION_RATE_D;
-        infected_probability -= temp;
-        if(probability <= infected_probability) {
+        temp *= pow(1.0 - INFECTION_RATE_MILD, this->event.getNumOfMild());
+        temp *= pow(1.0 - INFECTION_RATE_MILD, this->event.getNumOfSevere());
+        temp *= pow(1.0 - INFECTION_RATE_MILD, this->event.getNumOfPresymptomatic());
+        temp *= pow(1.0 - INFECTION_RATE_MILD, this->event.getNumOfAsymptomatic());
+
+        infectedProbability -= temp;
+        if(probability <= infectedProbability) {
             probability = rand();
             if (probability <= INFECTIOUS_TO_ASYMPTOMATIC)
                 this->setNextState(ASYMPTOMATIC);
@@ -96,7 +92,7 @@ void Agent::executeEvent()
     }
 };
 
-void Agent::setNextState(int nextState)
+void Agent::setNextState(WELLNESS nextState)
 {
     this->nextState = nextState;
 };
@@ -113,9 +109,9 @@ void Agent::setEvent(Event event)
 
 void Agent::updateWellness()
 {
-    if (this->nextState != -1) {
+    if (this->nextState != INIT) {
         this->wellness = this->nextState;
-        this->nextState = -1;
+        this->nextState = INIT;
     }
 };
 

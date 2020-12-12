@@ -1,6 +1,6 @@
 #include <iostream>
 #include <string>
-#include "../header/TransmissionEvent.h"
+#include "../hpp/transmission_event.h"
 
 TransmissionEvent::TransmissionEvent() : Event()
 {}
