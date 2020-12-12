@@ -1,4 +1,4 @@
-#include "transmission_event.h"
+#include "transmission_event.hpp"
 
 #ifndef MEETING_H
 #define MEETING_H

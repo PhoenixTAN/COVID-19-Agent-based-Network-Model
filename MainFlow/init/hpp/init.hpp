@@ -1,14 +1,9 @@
-#ifndef INIT_HPP
-#define INIT_HPP
+#ifndef INIT_H
+#define INIT_H
 
-#include "../../Agent/hpp/Agent.hpp"
+#include "../../agent/hpp/agent.hpp"
 
-/**
- * Description: use 
- * 
-*/
-void init_network(Agent* network, int NETWORK_SIZE) {
 
-}
+void init_network(Agent* network, int NETWORK_SIZE);
 
 #endif

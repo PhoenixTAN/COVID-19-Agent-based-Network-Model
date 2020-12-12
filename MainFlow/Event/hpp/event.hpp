@@ -33,6 +33,7 @@ private:
   int numOfSevere;
   int numOfDead;
 
+  /* virtual function to support dynamic_cast */
   virtual void poly();
 
 };

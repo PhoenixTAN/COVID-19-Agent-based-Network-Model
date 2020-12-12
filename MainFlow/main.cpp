@@ -1,7 +1,6 @@
 #include <iostream>
 #include "params.hpp"
-#include "Agent/hpp/Agent.hpp"
-#include "Event/hpp/Meeting.hpp"
+#include "agent/hpp/agent.hpp"
 #include "init/hpp/init.hpp"
 
 
@@ -16,7 +15,7 @@ int main() {
 
     /* initialize the agents */
     Agent* agent = new Agent(0);
-    agent->setEvent(new Meeting());
+
     
     /* initialize the events */
 
