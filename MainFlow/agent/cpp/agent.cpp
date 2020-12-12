@@ -14,7 +14,6 @@
 
 #include <cmath>
 #include <ctime>
-#include <typeinfo>
 
 Agent::Agent(int id)
 {
@@ -47,17 +46,16 @@ WELLNESS Agent::getNextState()
 void Agent::executeEvent()
 {
     srand(RANDOM_SEED);
-    float probability = rand();
-    Event* e = &(this->event);
+    double probability = rand() / double(RAND_MAX);
     // transmission event, if you would be infected
-    if(dynamic_cast<TransmissionEvent*>(&(this->event)) && this->wellness == SUSCEPTIBLE) {
-        float infectedProbability = 1.0;
-        float temp = 1.0;
+    if(dynamic_cast<TransmissionEvent*>(this->event) && this->wellness == SUSCEPTIBLE) {
+        double infectedProbability = 1.0;
+        double temp = 1.0;
         
-        temp *= pow(1.0 - INFECTION_RATE_MILD, this->event.getNumOfMild());
-        temp *= pow(1.0 - INFECTION_RATE_MILD, this->event.getNumOfSevere());
-        temp *= pow(1.0 - INFECTION_RATE_MILD, this->event.getNumOfPresymptomatic());
-        temp *= pow(1.0 - INFECTION_RATE_MILD, this->event.getNumOfAsymptomatic());
+        temp *= pow(1.0 - INFECTION_RATE_MILD, this->event->getNumOfMild());
+        temp *= pow(1.0 - INFECTION_RATE_MILD, this->event->getNumOfSevere());
+        temp *= pow(1.0 - INFECTION_RATE_MILD, this->event->getNumOfPresymptomatic());
+        temp *= pow(1.0 - INFECTION_RATE_MILD, this->event->getNumOfAsymptomatic());
 
         infectedProbability -= temp;
 
@@ -108,12 +106,12 @@ void Agent::setNextState(WELLNESS nextState)
     this->nextState = nextState;
 };
 
-Event Agent::getEvent()
+Event* Agent::getEvent()
 {
     return this->event;
 };
 
-void Agent::setEvent(Event event)
+void Agent::setEvent(Event* event)
 {
     this->event = event;
 };
@@ -126,7 +124,7 @@ void Agent::updateWellness()
     }
 };
 
-std::vector<Agent> Agent::getNeighbors()
+std::vector<Agent*> Agent::getNeighbors()
 {
     return this->neighbors;
 };
