@@ -25,6 +25,7 @@ public:
     Agent(int number); // constructor
     Agent();    // default constructor
     int getId();
+    void setId(int id);
     WELLNESS getWellness();
     WELLNESS getNextState();
     void setNextState(WELLNESS nextState);
@@ -33,6 +34,7 @@ public:
     void executeEvent();
     void updateWellness();
     std::vector<Agent*> getNeighbors();
+    void addNeighbor(Agent* agent);
 };
 
 #endif /* Agent_hpp */

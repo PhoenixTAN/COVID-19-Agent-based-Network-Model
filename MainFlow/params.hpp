@@ -3,7 +3,7 @@
 
 
 
-const static int RANDOM_SEED = 1;
+const static unsigned int RANDOM_SEED = 1;
 
 const static int SIMULATION_DAYS = 90;
 const static int NETWORK_SIZE = 100;
@@ -13,7 +13,7 @@ const static int MINIMUM_AGENT_IN_SOCIAL_EVENT = 2;
 /* the probability of transfering from susceptible to presymptomatic 
 if get infected */
 const static float INFECTIOUS_TO_PRESYMPTOMATIC = 0.8;
-static float INFECTIOUS_TO_ASYMPTOMATIC = 1 - INFECTION_RATE_PRESYMPTOMATIC;
+const static float INFECTIOUS_TO_ASYMPTOMATIC = 0.2;
 
 /* It may take 1 ~ 14 days to show symtoms */
 const static float PRESYMPTOMATIC_TO_MILD = 0.25;

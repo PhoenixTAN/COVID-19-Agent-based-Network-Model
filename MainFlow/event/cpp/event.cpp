@@ -82,4 +82,4 @@ void Event::increment(WELLNESS wellness){
     }
 }
 
-void poly () {}
+void Event::poly () {}

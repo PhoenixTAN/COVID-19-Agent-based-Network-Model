@@ -33,6 +33,10 @@ int Agent::getId()
     return this->id;
 };
 
+void Agent::setId(int id) {
+    this->id = id;
+};
+
 WELLNESS Agent::getWellness()
 {
     return this->wellness;
@@ -128,3 +132,7 @@ std::vector<Agent*> Agent::getNeighbors()
 {
     return this->neighbors;
 };
+
+void Agent::addNeighbor(Agent* agent) {
+    this->neighbors.push_back(agent);
+}

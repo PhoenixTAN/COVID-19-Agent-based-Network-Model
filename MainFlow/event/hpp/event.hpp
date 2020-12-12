@@ -1,6 +1,7 @@
 #ifndef EVENT_H
 #define EVENT_H
 #include "../../params.hpp"
+#include "../../agent/hpp/wellness.hpp"
 
 class Event {
 public:

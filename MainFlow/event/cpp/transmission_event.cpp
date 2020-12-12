@@ -1,5 +1,5 @@
 #include <iostream>
-#include "../hpp/transmission_event.h"
+#include "../hpp/transmission_event.hpp"
 
 TransmissionEvent::TransmissionEvent() : Event()
 {}

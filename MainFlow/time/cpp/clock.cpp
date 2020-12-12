@@ -11,7 +11,7 @@ const static int HOURS_NUM_OF_A_DAY = 24;
 const static int WORKING_TIME_START = 8;
 const static int WORKING_TIME_STOP = 22;
 
-
+Clock* Clock::instance = NULL;
 
 Clock::Clock()
 {

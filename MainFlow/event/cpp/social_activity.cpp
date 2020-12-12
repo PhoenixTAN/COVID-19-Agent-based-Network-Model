@@ -1,4 +1,4 @@
 #include <iostream>
-#include "../hpp/social_activity.h"
+#include "../hpp/social_activity.hpp"
 
 SocialActivity::SocialActivity() : TransmissionEvent(){}

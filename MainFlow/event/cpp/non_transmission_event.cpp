@@ -1,4 +1,4 @@
-#include "../hpp/non_transmission_event.h"
+#include "../hpp/non_transmission_event.hpp"
 
 NonTransmissionEvent::NonTransmissionEvent() : Event()
 {}

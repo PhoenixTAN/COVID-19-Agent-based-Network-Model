@@ -5,6 +5,7 @@
 #include "event/hpp/event.hpp"
 #include "init/hpp/init.hpp"
 #include "time/hpp/clock.hpp"
+#include "time/hpp/hour.hpp"
 #include "event/hpp/meeting.hpp"
 #include "event/hpp/non_transmission_event.hpp"
 #include "event/hpp/transmission_event.hpp"
@@ -58,7 +59,7 @@ void createSocialInterationEvents(std::set<int> set, Agent* network){
         }
     }
 }
-
+/*
 void createMeetingEvents(std::set<int> set, Agent* network){
 
     int numberOfEvent = rand(); // the number of social events
@@ -105,7 +106,7 @@ void createMeetingEvents(std::set<int> set, Agent* network){
     }
 
 }
-
+*/
 int main() {
 
     /* Initialize the clock */
@@ -113,10 +114,28 @@ int main() {
 
     /* initialize the network */
     Agent* network = new Agent[NETWORK_SIZE];
+
+    /* set agent id */
+    std::cout << "set agent id" << std::endl;
+    init_agents(network, NETWORK_SIZE);
+
+    /* initialize the network */
+    std::cout << "initialize the network..." << std::endl;
     init_network(network, NETWORK_SIZE);
 
-    /* initialize the agents */
-    Agent* agent = new Agent(0);
+    /* print network */
+    for ( int i = 0; i < NETWORK_SIZE; i++ ) {
+        std::cout << "Agent " << i << ": ";
+        std::vector<Agent*> neighbors = network[i].getNeighbors();
+        for ( int j = 0; j < neighbors.size(); j++ ) {
+            std::cout << neighbors[j]->getId() << " ";
+        }
+        std::cout << std::endl;
+    }
+
+    /* initialize all agents */
+
+    // init_network(network, NETWORK_SIZE);
 
     srand(RANDOM_SEED);
     
@@ -149,7 +168,7 @@ int main() {
 
                 /* initialize meeting events based on social network*/
 
-                createMeetingEvents(agentSet, network);
+                // createMeetingEvents(agentSet, network);
 
                 /* Every agent executes the event in parallel */
 
