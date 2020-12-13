@@ -137,14 +137,7 @@ int main() {
 
     srand(RANDOM_SEED);
 
-    // create a hash set for Agents' id
-    
-    std::set<int> agentSet;
-    createAgentSet(agentSet, network);
-
-    for(int id:agentSet){
-        std::cout << id << std::endl;
-    }
+   
     
     // while loop for every hour
     while(true){
@@ -160,6 +153,15 @@ int main() {
             break;
         }
 
+         // create a hash set for Agents' id
+    
+        std::set<int> agentSet;
+        createAgentSet(agentSet, network);
+
+        // for(int id:agentSet){
+        //     std::cout << id << std::endl;
+        // }
+
         switch (hour)
         {
             case WORKING:
@@ -167,6 +169,8 @@ int main() {
 
                 /* generate an event for each agent for each hour */
                 /* each agent has only one event each day */
+
+                std::cout << "Population: " << agentSet.size() << std::endl;
 
                 /* initialize meeting events based on social network*/
                 createMeetingEvents(agentSet, network);
