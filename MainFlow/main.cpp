@@ -12,7 +12,10 @@
 #include "event/hpp/social_activity.hpp"
 #include "event/hpp/stay_alone.hpp"
 
-
+/**
+ * @Author Xueyan Xia
+ * @Description The set contains the agents who currently have no event
+*/
 void createAgentSet(std::set<int> &set, Agent* network){
     for(int i = 0; i < NETWORK_SIZE; i++){
         set.insert(network[i].getId());
@@ -61,6 +64,12 @@ void createSocialInterationEvents(std::set<int> &set, Agent* network) {
     }
 }
 
+
+/**
+ * @Author Xueyan Xia
+ * @Description: create a meeting events for an angent and inform his/her neighbors
+ * 
+*/
 void createMeetingEvents(std::set<int> &set, Agent* network){
 
     std::cout << "creating meeting events" << std::endl;
@@ -73,7 +82,9 @@ void createMeetingEvents(std::set<int> &set, Agent* network){
     // ensure random agent has no event 
     while(true){
         auto search = set.find(agentID);
+        // if a not dead agent has no event currently
         if(search != set.end() && network[agentID].getWellness() != DEAD) {
+            std::cout << "Select agent " << agentID << std::endl;
             break;
         }
         agentID = rand() % NETWORK_SIZE;
@@ -93,15 +104,22 @@ void createMeetingEvents(std::set<int> &set, Agent* network){
 
     for(int i = 0; i < neighbors.size(); i++){
         Agent* neighbor = neighbors[i];
+        // inform neighbors
         if(network[agentID].getWellness() != DEAD){
             neighbor->setEvent(event);
         }
+        // update the event statistics
         event->increment(neighbor->getWellness());
         set.erase(neighbor->getId());
     }
 
 }
 
+/**
+ * @Author Ziqi Tan
+ * @Description print the social network
+ * 
+*/
 void print_network(Agent* network, int NETWORK_SIZE) {
     for ( int i = 0; i < NETWORK_SIZE; i++ ) {
         std::cout << "Agent " << i << ": ";
@@ -137,8 +155,6 @@ int main() {
 
     srand(RANDOM_SEED);
 
-   
-    
     // while loop for every hour
     while(true){
 
@@ -154,7 +170,6 @@ int main() {
         }
 
          // create a hash set for Agents' id
-    
         std::set<int> agentSet;
         createAgentSet(agentSet, network);
 
@@ -174,7 +189,6 @@ int main() {
 
                 /* initialize meeting events based on social network*/
                 createMeetingEvents(agentSet, network);
-
 
                 /* initialize social interaction events*/
                 // createSocialInterationEvents(agentSet, network);
@@ -204,6 +218,5 @@ int main() {
 
         /* statistics for each day */
     }
-
-
+    
 }
