@@ -17,6 +17,7 @@ public:
     void nextHour();
     int getCurrentDay();
     HOUR getCurrentHour();
+    int getCurrentHourNum();
 };
 
 #endif 

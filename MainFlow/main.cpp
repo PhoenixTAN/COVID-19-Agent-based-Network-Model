@@ -13,13 +13,13 @@
 #include "event/hpp/stay_alone.hpp"
 
 
-void createAgentSet(std::set<int> set, Agent* network){
+void createAgentSet(std::set<int> &set, Agent* network){
     for(int i = 0; i < NETWORK_SIZE; i++){
         set.insert(network[i].getId());
     }
 }
 
-void createSocialInterationEvents(std::set<int> set, Agent* network) {
+void createSocialInterationEvents(std::set<int> &set, Agent* network) {
     std::cout << "Creating social interaction events" << std::endl;
 
     int numberOfEvent = rand() % (MAXIMUM_NUM_OF_SOCIAL_EVENT_IN_A_HOUR - 1) + 1; // the number of social events
@@ -61,7 +61,7 @@ void createSocialInterationEvents(std::set<int> set, Agent* network) {
     }
 }
 
-void createMeetingEvents(std::set<int> set, Agent* network){
+void createMeetingEvents(std::set<int> &set, Agent* network){
 
     std::cout << "creating meeting events" << std::endl;
 
@@ -136,14 +136,24 @@ int main() {
     init_network(network, NETWORK_SIZE);
 
     srand(RANDOM_SEED);
+
+    // create a hash set for Agents' id
+    
+    std::set<int> agentSet;
+    createAgentSet(agentSet, network);
+
+    for(int id:agentSet){
+        std::cout << id << std::endl;
+    }
     
     // while loop for every hour
     while(true){
 
         HOUR hour = clock->getCurrentHour();
         int day = clock->getCurrentDay();
+        int hourNum = clock->getCurrentHourNum();
 
-        std::cout << "day " << day << "   hour " << hour << std::endl;
+        std::cout << "day " << day << "   hour " << hourNum << std::endl;
 
         if ( day == -1 ) {
             // simulation ends
@@ -154,10 +164,6 @@ int main() {
         {
             case WORKING:
             {
-                // create a hash set for Agents' id
-
-                std::set<int> agentSet;
-                createAgentSet(agentSet, network);
 
                 /* generate an event for each agent for each hour */
                 /* each agent has only one event each day */
@@ -167,7 +173,7 @@ int main() {
 
 
                 /* initialize social interaction events*/
-                createSocialInterationEvents(agentSet, network);
+                // createSocialInterationEvents(agentSet, network);
 
                 /* Every agent executes the event in parallel */
 

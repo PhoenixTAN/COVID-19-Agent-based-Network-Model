@@ -16,6 +16,8 @@ Clock* Clock::instance = NULL;
 Clock::Clock()
 {
     this->currentDay = 0;
+    this->currentHour = 0;
+    this->hour = SLEEPING;
 };
 
 Clock* Clock::getInstance(){
@@ -54,4 +56,9 @@ int Clock::getCurrentDay()
 HOUR Clock::getCurrentHour()
 {
     return this->hour;
+};
+
+int Clock::getCurrentHourNum()
+{
+    return this->currentHour;
 };
