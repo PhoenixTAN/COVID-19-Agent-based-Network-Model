@@ -20,12 +20,14 @@ Agent::Agent(int id)
     this->id = id;
     this->wellness = SUSCEPTIBLE;
     this->nextState = INIT;
+    this->event = NULL;
 };
 
 Agent::Agent() {
     this->id = 0;
     this->wellness = SUSCEPTIBLE;
     this->nextState = INIT;
+    this->event = NULL;
 }
 
 int Agent::getId()
@@ -103,6 +105,7 @@ void Agent::executeEvent()
                 break;
         }
     }
+    this->event = NULL;
 };
 
 void Agent::setNextState(WELLNESS nextState)

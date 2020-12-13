@@ -23,43 +23,58 @@ void createAgentSet(std::set<int> &set, Agent* network){
 }
 
 void createSocialInterationEvents(std::set<int> &set, Agent* network) {
+
     std::cout << "Creating social interaction events" << std::endl;
 
-    int numberOfEvent = rand() % (MAXIMUM_NUM_OF_SOCIAL_EVENT_IN_A_HOUR - 1) + 1; // the number of social events
+    std::cout << "People available " << set.size() << std::endl;
 
-    for(int i = 0; i < numberOfEvent; i++){
+    if(set.empty()){
+        return;
+    }
 
-        if(set.size() < MINIMUM_AGENT_IN_SOCIAL_EVENT){
-            break;
-        }
+    // the number of agents who will execute this event
+    int numberOfAgents = rand() % (MAXIMUM_NUM_OF_SOCIAL_EVENT_IN_A_HOUR - MINIMUM_NUM_OF_SOCIAL_EVENT_IN_A_HOUR) + MINIMUM_NUM_OF_SOCIAL_EVENT_IN_A_HOUR; 
 
-        // initialize an event
-        Event* event = new SocialActivity();
+    if(set.size() < numberOfAgents){
+        return;
+    }
 
-        // the number of agents who will execute this event
-        int numberOfAgents = rand() % (set.size() - MINIMUM_AGENT_IN_SOCIAL_EVENT) + MINIMUM_AGENT_IN_SOCIAL_EVENT; 
+    // initialize an event
+    Event* event = new SocialActivity();
 
-        // assgin social event for every agents who will execute this event
-        for(int j = 0; j < numberOfAgents; j++){
+    int count = 0;
+    
+    // assgin social event for every agents who will execute this event
+    for(int i = 0; i < NETWORK_SIZE; i++){
 
-            int agentID = rand() % NETWORK_SIZE;
+        Agent* agent = &network[i];
 
-            // ensure random agent has no event 
-            while(true){
-                auto search = set.find(agentID);
-                if(search != set.end() && network[agentID].getWellness() != DEAD) {
-                    break;
-                }
-                agentID = rand() % NETWORK_SIZE;
+        // ensure random agent has no event 
+        auto search = set.find(agent->getId());
+        if(search != set.end() && agent->getWellness() != DEAD && agent->getEvent() == NULL) {
+             
+            // Probability
+            srand(RANDOM_SEED);
+            double probability = rand() / double(RAND_MAX);
+
+            if(probability < EXECUTE_SOCIAL_EVENT){
+                // set event to this agent
+                agent->setEvent(event);
+                // add condition of agent to this event
+                event->increment(agent->getWellness());
+                // delete the agent in set
+                set.erase(agent->getId());
+            }else{
+                event = new StayAlone();
+                agent->setEvent(event);
+                set.erase(agent->getId());
             }
 
-            Agent agent = network[agentID];
-            // set event to this agent
-            agent.setEvent(event);
-            // add condition of agent to this event
-            event->increment(agent.getWellness());
-            // delete the agent in set
-            set.erase(agentID);
+            count++;
+            
+            if(count == numberOfAgents){
+                break;
+            }
         }
     }
 }
@@ -73,6 +88,8 @@ void createSocialInterationEvents(std::set<int> &set, Agent* network) {
 void createMeetingEvents(std::set<int> &set, Agent* network){
 
     std::cout << "creating meeting events" << std::endl;
+
+    std::cout << "People available " << set.size() << std::endl;
 
     // initialize an event
     Event* event = new Meeting();
@@ -90,29 +107,40 @@ void createMeetingEvents(std::set<int> &set, Agent* network){
         agentID = rand() % NETWORK_SIZE;
     }
 
-    Agent agent = network[agentID];
+    Agent* agent = &network[agentID];
 
     // get his neighbors
-    std::vector<Agent*> neighbors = agent.getNeighbors();
+    std::vector<Agent*> neighbors = agent->getNeighbors();
 
     // set event to this agent
-    agent.setEvent(event);
+    agent->setEvent(event);
     // add condition of agent to this event
-    event->increment(agent.getWellness());
+    event->increment(agent->getWellness());
     // delete the agent in set
     set.erase(agentID);
 
     for(int i = 0; i < neighbors.size(); i++){
         Agent* neighbor = neighbors[i];
-        // inform neighbors
-        if(network[agentID].getWellness() != DEAD){
-            neighbor->setEvent(event);
-        }
-        // update the event statistics
-        event->increment(neighbor->getWellness());
-        set.erase(neighbor->getId());
-    }
 
+        auto search = set.find(neighbor->getId());
+        if(network[agentID].getWellness() != DEAD && search != set.end()){
+            
+            // Probability
+            srand(RANDOM_SEED);
+            double probability = rand() / double(RAND_MAX);
+            
+            if(probability < EXECUTE_METTING_EVENT){
+                neighbor->setEvent(event);
+                event->increment(neighbor->getWellness());
+                set.erase(neighbor->getId());
+            }else{
+                event = new StayAlone();
+                neighbor->setEvent(event);
+                set.erase(neighbor->getId());
+            }
+            
+        }
+    }
 }
 
 /**
@@ -191,7 +219,7 @@ int main() {
                 createMeetingEvents(agentSet, network);
 
                 /* initialize social interaction events*/
-                // createSocialInterationEvents(agentSet, network);
+                createSocialInterationEvents(agentSet, network);
 
                 /* Every agent executes the event in parallel */
 

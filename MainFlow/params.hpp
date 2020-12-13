@@ -8,8 +8,11 @@ const static unsigned int RANDOM_SEED = 1;
 const static int SIMULATION_DAYS = 10;
 const static int NETWORK_SIZE = 30;
 
-static int MAXIMUM_NUM_OF_SOCIAL_EVENT_IN_A_HOUR = NETWORK_SIZE / 10;
-const static int MINIMUM_AGENT_IN_SOCIAL_EVENT = 2;
+const static int MAXIMUM_NUM_OF_SOCIAL_EVENT_IN_A_HOUR = 5;
+const static int MINIMUM_NUM_OF_SOCIAL_EVENT_IN_A_HOUR = 2;
+
+const static int EXECUTE_SOCIAL_EVENT = 0.5;
+const static int EXECUTE_METTING_EVENT = 0.7;
 
 /* the probability of transfering from susceptible to presymptomatic 
 if get infected */
