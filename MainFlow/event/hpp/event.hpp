@@ -1,5 +1,6 @@
 #ifndef EVENT_H
 #define EVENT_H
+#include <string>
 #include "../../params.hpp"
 #include "../../agent/hpp/wellness.hpp"
 
@@ -23,6 +24,8 @@ public:
     void setNumOfSevere(int numOfSevere);
     void setNumOfDead(int numOfDead);
     void increment(WELLNESS wellness);
+
+    virtual std::string name();
 
 
 private:

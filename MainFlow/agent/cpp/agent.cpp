@@ -5,12 +5,12 @@
 //  Created by Cayden on 2020/12/10.
 //
 
-#include "..\hpp\agent.hpp"
-#include "..\hpp\wellness.hpp"
-#include "..\..\event\hpp\event.hpp"
-#include "..\..\event\hpp\transmission_event.hpp"
-#include "..\..\event\hpp\non_transmission_event.hpp"
-#include "..\..\params.hpp"
+#include "../hpp/agent.hpp"
+#include "../hpp/wellness.hpp"
+#include "../../event/hpp/event.hpp"
+#include "../../event/hpp/transmission_event.hpp"
+#include "../../event/hpp/non_transmission_event.hpp"
+#include "../../params.hpp"
 
 #include <cmath>
 #include <ctime>
@@ -57,7 +57,7 @@ void Agent::executeEvent()
     if(dynamic_cast<TransmissionEvent*>(this->event) && this->wellness == SUSCEPTIBLE) {
         double infectedProbability = 1.0;
         double temp = 1.0;
-        
+
         temp *= pow(1.0 - INFECTION_RATE_MILD, this->event->getNumOfMild());
         temp *= pow(1.0 - INFECTION_RATE_MILD, this->event->getNumOfSevere());
         temp *= pow(1.0 - INFECTION_RATE_MILD, this->event->getNumOfPresymptomatic());
@@ -74,8 +74,8 @@ void Agent::executeEvent()
             }
         }
 
-    }else{ 
-        // non transmission event 
+    }else{
+        // non transmission event
         switch (this->wellness) {
             case PRESYMPTOMATIC:
                 if (probability <= PRESYMPTOMATIC_TO_MILD) {

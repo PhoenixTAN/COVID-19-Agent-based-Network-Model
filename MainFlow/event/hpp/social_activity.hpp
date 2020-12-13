@@ -5,5 +5,6 @@
 class SocialActivity : public TransmissionEvent{
 public:
   SocialActivity();
+  virtual std::string name();
 };
 #endif

@@ -1,3 +1,4 @@
+#include <string>
 #include "../hpp/event.hpp"
 #include "../../agent/hpp/wellness.hpp"
 
@@ -83,3 +84,7 @@ void Event::increment(WELLNESS wellness){
 }
 
 void Event::poly () {}
+
+std::string Event::name() {
+  return "Event";
+}

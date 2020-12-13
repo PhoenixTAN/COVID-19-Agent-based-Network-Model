@@ -5,5 +5,6 @@
 class StayAlone : public NonTransmissionEvent{
 public:
   StayAlone();
+  virtual std::string name();
 };
 #endif

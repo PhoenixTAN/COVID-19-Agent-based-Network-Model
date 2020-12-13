@@ -5,5 +5,6 @@
 class Meeting : public TransmissionEvent{
 public:
   Meeting();
+  virtual std::string name();
 };
 #endif

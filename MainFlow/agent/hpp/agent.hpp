@@ -7,7 +7,7 @@
 
 #ifndef AGENT_HPP
 #define AGENT_HPP
-#include "..\..\event\hpp\event.hpp"
+#include "../../event/hpp/event.hpp"
 #include "wellness.hpp"
 #include <vector>
 
