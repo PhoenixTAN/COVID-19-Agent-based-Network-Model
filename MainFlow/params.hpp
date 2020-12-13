@@ -1,18 +1,16 @@
 #ifndef PARAMS_H
 #define PARAMS_H
 
-
-
 const static unsigned int RANDOM_SEED = 1;
 
-const static int SIMULATION_DAYS = 10;
-const static int NETWORK_SIZE = 30;
+const static int SIMULATION_DAYS = 3;
+const static int NETWORK_SIZE = 20;
 
 const static int MAXIMUM_NUM_OF_SOCIAL_EVENT_IN_A_HOUR = 5;
 const static int MINIMUM_NUM_OF_SOCIAL_EVENT_IN_A_HOUR = 2;
 
-const static int EXECUTE_SOCIAL_EVENT = 0.5;
-const static int EXECUTE_METTING_EVENT = 0.7;
+const static float EXECUTE_SOCIAL_EVENT = 0.5;
+const static float EXECUTE_METTING_EVENT = 0.7;
 
 /* the probability of transfering from susceptible to presymptomatic 
 if get infected */

@@ -30,3 +30,5 @@ clock.o: ./time/cpp/clock.cpp
 
 hour.o: ./time/cpp/hour.cpp
 	g++ -c -o hour.o ./time/cpp/hour.cpp
+
+

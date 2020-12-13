@@ -119,6 +119,7 @@ void createMeetingEvents(std::set<int> &set, Agent* network){
     // delete the agent in set
     set.erase(agentID);
 
+    std::cout << "Selecting neighbor: ";
     for(int i = 0; i < neighbors.size(); i++){
         Agent* neighbor = neighbors[i];
 
@@ -127,9 +128,10 @@ void createMeetingEvents(std::set<int> &set, Agent* network){
             
             // Probability
             srand(RANDOM_SEED);
-            double probability = rand() / double(RAND_MAX);
+            float probability = rand() / float(RAND_MAX);
             
             if(probability < EXECUTE_METTING_EVENT){
+                std::cout  << neighbor->getId();
                 neighbor->setEvent(event);
                 event->increment(neighbor->getWellness());
                 set.erase(neighbor->getId());
@@ -141,6 +143,7 @@ void createMeetingEvents(std::set<int> &set, Agent* network){
             
         }
     }
+    std::cout << std::endl;
 }
 
 /**
@@ -156,7 +159,45 @@ void print_network(Agent* network, int NETWORK_SIZE) {
             std::cout << neighbors[j]->getId() << " ";
         }
         std::cout << std::endl;
+
     }
+}
+
+/**
+ * @Author Ziqi Tan
+ * @Description execute the events
+*/
+void agentEventExecution(Agent* network, int NETWORK_SIZE) {
+    
+    /* print events for each agent */
+    for ( int i = 0; i < NETWORK_SIZE; i++ ) {
+        
+        Agent agent = network[i];
+        Event* event = agent.getEvent();
+        
+        
+        if ( event != NULL ) {
+            std::cout << "Agent " << i << " ";
+            std::cout << "Event type: ";
+            // print event type
+            /*if (dynamic_cast<Meeting*>(event)) {
+                std::cout << "Event type : Meeting." << std::endl;
+            }
+            else if (dynamic_cast<SocialActivity*>(event)){
+                std::cout << "Event type: Social activity." << std::endl; 
+            }
+            else {
+                std::cout << "Event type: Stay alone." << std::endl; 
+            }*/
+            std::cout << std::endl;
+        }
+        else {
+            // std::cout << "Event is NULL" << std::endl; 
+        }
+    }
+
+    // execute the events in each agent in parallel
+
 }
 
 int main() {
@@ -197,7 +238,7 @@ int main() {
             break;
         }
 
-         // create a hash set for Agents' id
+        // create a hash set for Agents' id
         std::set<int> agentSet;
         createAgentSet(agentSet, network);
 
@@ -219,10 +260,11 @@ int main() {
                 createMeetingEvents(agentSet, network);
 
                 /* initialize social interaction events*/
-                createSocialInterationEvents(agentSet, network);
+                // createSocialInterationEvents(agentSet, network);
 
                 /* Every agent executes the event in parallel */
-
+                agentEventExecution(network, NETWORK_SIZE);
+                
                 // TODO
 
                 /* barrier */

@@ -105,6 +105,8 @@ void Agent::executeEvent()
                 break;
         }
     }
+
+    // TODO
     this->event = NULL;
 };
 
