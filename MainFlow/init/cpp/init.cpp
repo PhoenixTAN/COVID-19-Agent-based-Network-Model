@@ -2,7 +2,6 @@
 #include <cstdlib>      /* random number */
 #include <time.h>
 #include <iostream>
-#include "../../params.hpp"
 
 
 /**
@@ -12,7 +11,6 @@
 void init_network(Agent* network, int NETWORK_SIZE) {
     // initial network size
     int initialSize = NETWORK_SIZE / 10;
-    srand(RANDOM_SEED);
 
     // connect others with half and half probability
     float PROBABILITY_OF_CONNECTION = 0.6;
@@ -57,12 +55,17 @@ void init_network(Agent* network, int NETWORK_SIZE) {
     }
 }
 
-void init_agents(Agent* network, int NETWORK_SIZE) {
+void init_agents(Agent* network, int NETWORK_SIZE, int INITIAL_NUM_OF_PRESYMTOMATIC) {
     for ( int i = 0; i < NETWORK_SIZE; i++ ) {
         network[i].setId(i);
     }
+
+    /* randomly infect some people */
+    int infected = 0;
+    while ( infected < INITIAL_NUM_OF_PRESYMTOMATIC) {
+        int agentID = rand() % NETWORK_SIZE;
+        network[agentID].setWellness(PRESYMPTOMATIC);
+        infected++;
+    }
 }
 
-void init_event(){
-    
-}

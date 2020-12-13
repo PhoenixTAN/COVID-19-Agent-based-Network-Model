@@ -1,13 +1,17 @@
 #ifndef PARAMS_H
 #define PARAMS_H
 
-const static unsigned int RANDOM_SEED = 1;
+#include <algorithm>    // std::max
 
-const static int SIMULATION_DAYS = 3;
+const static unsigned int RANDOM_SEED = 10;
+
+const static int SIMULATION_DAYS = 1;
 const static int NETWORK_SIZE = 20;
 
 const static int MAXIMUM_NUM_OF_SOCIAL_EVENT_IN_A_HOUR = 5;
 const static int MINIMUM_NUM_OF_SOCIAL_EVENT_IN_A_HOUR = 2;
+
+static int INITIAL_NUM_OF_PRESYMTOMATIC = std::max(5, NETWORK_SIZE / 1000);
 
 const static float EXECUTE_SOCIAL_EVENT = 0.5;
 const static float EXECUTE_METTING_EVENT = 0.7;
@@ -19,6 +23,10 @@ const static float INFECTIOUS_TO_ASYMPTOMATIC = 0.2;
 
 /* It may take 1 ~ 14 days to show symtoms */
 const static float PRESYMPTOMATIC_TO_MILD = 0.25;
+const static int INCUBATION_PEROID = 14;
+const static int INCUBATION_EXPECTATION = 7;
+const static int INCUBATION_VARIANCE = 3;
+
 const static float ASYMPTOMATIC_TO_RECOVERED = 0.3;
 
 const static float MILD_TO_SEVERE = 0.3;

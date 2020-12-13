@@ -25,8 +25,7 @@ public:
     void setNumOfDead(int numOfDead);
     void increment(WELLNESS wellness);
 
-    virtual std::string name();
-
+    virtual std::string name() = 0;
 
 private:
     // parameters
@@ -37,9 +36,6 @@ private:
     int numOfRecovered;
     int numOfSevere;
     int numOfDead;
-
-    /* virtual function to support dynamic_cast */
-    virtual void poly();
 
 };
 #endif

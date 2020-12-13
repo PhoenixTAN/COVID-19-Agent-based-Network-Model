@@ -1,5 +1,6 @@
 #include <iostream>
 #include <set>
+#include <ctime>    /* time seed */
 #include "params.hpp"
 #include "agent/hpp/agent.hpp"
 #include "event/hpp/event.hpp"
@@ -54,7 +55,6 @@ void createSocialInterationEvents(std::set<int> &set, Agent* network) {
         if(search != set.end() && agent->getWellness() != DEAD && agent->getEvent() == NULL) {
 
             // Probability
-            srand(RANDOM_SEED);
             double probability = rand() / double(RAND_MAX);
 
             if(probability < EXECUTE_SOCIAL_EVENT){
@@ -95,17 +95,20 @@ void createMeetingEvents(std::set<int> &set, Agent* network){
     Event* event = new Meeting();
 
     int agentID = rand() % NETWORK_SIZE;
-
-    // ensure random agent has no event
+    
+    // ensure random agent has no event 
     while(true){
         auto search = set.find(agentID);
         // if a not dead agent has no event currently
         if(search != set.end() && network[agentID].getWellness() != DEAD) {
-            std::cout << "Select agent " << agentID << std::endl;
+            std::cout << "Select agent " << agentID;
             break;
         }
         agentID = rand() % NETWORK_SIZE;
+        std::cout << " Random agent id: " << agentID;
     }
+
+    std::cout << std::endl;
 
     Agent* agent = &network[agentID];
 
@@ -121,17 +124,17 @@ void createMeetingEvents(std::set<int> &set, Agent* network){
 
     std::cout << "Selecting neighbor: ";
     for(int i = 0; i < neighbors.size(); i++){
+        
         Agent* neighbor = neighbors[i];
 
         auto search = set.find(neighbor->getId());
         if(network[agentID].getWellness() != DEAD && search != set.end()){
 
             // Probability
-            srand(RANDOM_SEED);
             float probability = rand() / float(RAND_MAX);
 
             if(probability < EXECUTE_METTING_EVENT){
-                std::cout  << neighbor->getId();
+                std::cout  << neighbor->getId() << " ";
                 neighbor->setEvent(event);
                 event->increment(neighbor->getWellness());
                 set.erase(neighbor->getId());
@@ -143,6 +146,7 @@ void createMeetingEvents(std::set<int> &set, Agent* network){
 
         }
     }
+    
     std::cout << std::endl;
 }
 
@@ -155,6 +159,7 @@ void print_network(Agent* network, int NETWORK_SIZE) {
     for ( int i = 0; i < NETWORK_SIZE; i++ ) {
         std::cout << "Agent " << i << ": ";
         std::vector<Agent*> neighbors = network[i].getNeighbors();
+        std::cout << "num of neighbors: " << neighbors.size() <<  "     ";
         for ( int j = 0; j < neighbors.size(); j++ ) {
             std::cout << neighbors[j]->getId() << " ";
         }
@@ -175,28 +180,83 @@ void agentEventExecution(Agent* network, int NETWORK_SIZE) {
         Agent agent = network[i];
         Event* event = agent.getEvent();
 
-
         if ( event != NULL ) {
-            std::cout << "Agent " << i << " ";
-            std::cout << "Event type: ";
-            // print event type
-            /*if (dynamic_cast<Meeting*>(event)) {
-                std::cout << "Event type : Meeting." << std::endl;
-            }
-            else if (dynamic_cast<SocialActivity*>(event)){
-                std::cout << "Event type: Social activity." << std::endl;
-            }
-            else {
-                std::cout << "Event type: Stay alone." << std::endl;
-            }*/
-            std::cout << std::endl;
-        }
-        else {
-            // std::cout << "Event is NULL" << std::endl;
+            std::cout << "Agent " << i << ": " << event->name() << std::endl;
         }
     }
 
     // execute the events in each agent in parallel
+    for ( int i = 0; i < NETWORK_SIZE; i++ ) {
+        Agent* agent = &network[i];
+        agent->executeEvent();
+    }
+
+}
+
+void updateAgentState(Agent* network, int NETWORK_SIZE) {
+    for ( int i = 0; i < NETWORK_SIZE; i++ ) {
+        Agent* agent = &network[i];
+        agent->updateWellness();
+    }
+}
+
+void printAgentState(Agent* network, int NETWORK_SIZE) {
+
+    int numOfSusceptible = 0;
+    int numOfPresymptomatic = 0;
+    int numOfAsymptomatic = 0;
+    int numOfMild = 0;
+    int numOfRecovered = 0;
+    int numOfSevere = 0;
+    int numOfDead = 0;
+    
+    for ( int i = 0; i < NETWORK_SIZE; i++ ) {
+        Agent* agent = &network[i];
+        WELLNESS state = agent->getWellness();
+        // std::cout << "Agent " << i << ": " << state << std::endl;
+        switch (state) {
+            case SUSCEPTIBLE:
+                numOfSusceptible++;
+                break;
+            case PRESYMPTOMATIC:
+                numOfPresymptomatic++;
+                break;
+            case ASYMPTOMATIC:
+                numOfAsymptomatic++;
+                break;
+            case MILD:
+                numOfMild++;
+                break;
+            case SEVERE:
+                numOfSevere++;
+                break;
+            case RECOVERED:
+                numOfRecovered++;
+                break;
+            case DEAD:
+                numOfDead++;
+                break;
+            default:
+                break;
+        }
+    }
+    std::cout << "numOfSusceptible: " << numOfSusceptible << std::endl;
+    std::cout << "numOfPresymptomatic: " << numOfPresymptomatic << std::endl;
+    std::cout << "numOfAsymptomatic: " << numOfAsymptomatic << std::endl;
+    std::cout << "numOfMild: " << numOfMild << std::endl;
+    std::cout << "numOfSevere: " << numOfSevere << std::endl;
+    std::cout << "numOfRecovered: " << numOfRecovered << std::endl;
+    std::cout << "numOfDead: " << numOfDead << std::endl;
+
+    std::cout << "Total number: " << 
+        numOfSusceptible + 
+        numOfPresymptomatic + 
+        numOfAsymptomatic + 
+        numOfMild + 
+        numOfSevere + 
+        numOfRecovered + 
+        numOfDead
+    << std::endl;
 
 }
 
@@ -212,7 +272,8 @@ int main() {
 
     /* set agent id */
     std::cout << "set agent id" << std::endl;
-    init_agents(network, NETWORK_SIZE);
+    init_agents(network, NETWORK_SIZE, INITIAL_NUM_OF_PRESYMTOMATIC);
+    printAgentState(network, NETWORK_SIZE);
 
     /* initialize the network */
     std::cout << "initialize the network..." << std::endl;
@@ -220,9 +281,6 @@ int main() {
 
     /* print network */
     print_network(network, NETWORK_SIZE);
-
-    /* initialize the whole network, set neighbors */
-    init_network(network, NETWORK_SIZE);
 
     srand(RANDOM_SEED);
 
@@ -248,6 +306,7 @@ int main() {
         //     std::cout << id << std::endl;
         // }
 
+        
         switch (hour)
         {
             case WORKING:
@@ -262,24 +321,23 @@ int main() {
                 createMeetingEvents(agentSet, network);
 
                 /* initialize social interaction events*/
-                // createSocialInterationEvents(agentSet, network);
+                createSocialInterationEvents(agentSet, network);
 
                 /* Every agent executes the event in parallel */
                 agentEventExecution(network, NETWORK_SIZE);
-
-                // TODO
-
                 /* barrier */
 
                 /* Every agent updates the state in parallel */
-
+                updateAgentState(network, NETWORK_SIZE);
                 /* barrier */
+
+                printAgentState(network, NETWORK_SIZE);
 
                 break;
             }
             case SLEEPING:
                 // sleeping time, do nothing
-                std::cout << "Sleeping" << std::endl;
+                // std::cout << "Sleeping" << std::endl;
                 break;
 
             default:

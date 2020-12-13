@@ -21,6 +21,7 @@ private:
     WELLNESS nextState;
     Event* event;
     std::vector<Agent*> neighbors;
+    int stateDurationHours;      // hours, the duration of the current state
 public:
     Agent(int number); // constructor
     Agent();    // default constructor
@@ -32,6 +33,7 @@ public:
     Event* getEvent();
     void setEvent(Event* event);
     void executeEvent();
+    void setWellness(WELLNESS state);
     void updateWellness();
     std::vector<Agent*> getNeighbors();
     void addNeighbor(Agent* agent);

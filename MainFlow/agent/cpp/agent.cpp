@@ -13,7 +13,7 @@
 #include "../../params.hpp"
 
 #include <cmath>
-#include <ctime>
+
 
 Agent::Agent(int id)
 {
@@ -21,6 +21,7 @@ Agent::Agent(int id)
     this->wellness = SUSCEPTIBLE;
     this->nextState = INIT;
     this->event = NULL;
+    this->stateDurationHours = 0;
 };
 
 Agent::Agent() {
@@ -28,6 +29,7 @@ Agent::Agent() {
     this->wellness = SUSCEPTIBLE;
     this->nextState = INIT;
     this->event = NULL;
+    this->stateDurationHours = 0;
 }
 
 int Agent::getId()
@@ -51,7 +53,6 @@ WELLNESS Agent::getNextState()
 
 void Agent::executeEvent()
 {
-    srand(RANDOM_SEED);
     double probability = rand() / double(RAND_MAX);
     // transmission event, if you would be infected
     if(dynamic_cast<TransmissionEvent*>(this->event) && this->wellness == SUSCEPTIBLE) {
@@ -66,11 +67,13 @@ void Agent::executeEvent()
         infectedProbability -= temp;
 
         if (probability <= infectedProbability) {
-            probability = rand();
+            probability = rand() / (double) RAND_MAX;
             if (probability <= INFECTIOUS_TO_ASYMPTOMATIC) {
                 this->setNextState(ASYMPTOMATIC);
             } else {
                 this->setNextState(PRESYMPTOMATIC);
+                // set incubation period
+                
             }
         }
 
@@ -130,6 +133,7 @@ void Agent::updateWellness()
     if (this->nextState != INIT) {
         this->wellness = this->nextState;
         this->nextState = INIT;
+        this->stateDurationHours = 1;
     }
 };
 
@@ -149,4 +153,9 @@ bool Agent::hasNeighbor(int neighborId) {
         }
     }
     return false;
+}
+
+
+void Agent::setWellness(WELLNESS state) {
+    this->wellness = state;
 }
