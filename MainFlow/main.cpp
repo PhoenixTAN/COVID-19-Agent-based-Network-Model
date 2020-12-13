@@ -19,7 +19,8 @@ void createAgentSet(std::set<int> set, Agent* network){
     }
 }
 
-void createSocialInterationEvents(std::set<int> set, Agent* network){
+void createSocialInterationEvents(std::set<int> set, Agent* network) {
+    std::cout << "Creating social interaction events" << std::endl;
 
     int numberOfEvent = rand() % (MAXIMUM_NUM_OF_SOCIAL_EVENT_IN_A_HOUR - 1) + 1; // the number of social events
 
@@ -62,6 +63,8 @@ void createSocialInterationEvents(std::set<int> set, Agent* network){
 
 void createMeetingEvents(std::set<int> set, Agent* network){
 
+    std::cout << "creating meeting events" << std::endl;
+
     // initialize an event
     Event* event = new Meeting();
 
@@ -99,12 +102,23 @@ void createMeetingEvents(std::set<int> set, Agent* network){
 
 }
 
+void print_network(Agent* network, int NETWORK_SIZE) {
+    for ( int i = 0; i < NETWORK_SIZE; i++ ) {
+        std::cout << "Agent " << i << ": ";
+        std::vector<Agent*> neighbors = network[i].getNeighbors();
+        for ( int j = 0; j < neighbors.size(); j++ ) {
+            std::cout << neighbors[j]->getId() << " ";
+        }
+        std::cout << std::endl;
+    }
+}
+
 int main() {
 
     /* Initialize the clock */
     Clock* clock = Clock::getInstance();
 
-    /* initialize the network */
+    /* create the network */
     Agent* network = new Agent[NETWORK_SIZE];
 
     /* set agent id */
@@ -116,17 +130,9 @@ int main() {
     init_network(network, NETWORK_SIZE);
 
     /* print network */
-    for ( int i = 0; i < NETWORK_SIZE; i++ ) {
-        std::cout << "Agent " << i << ": ";
-        std::vector<Agent*> neighbors = network[i].getNeighbors();
-        for ( int j = 0; j < neighbors.size(); j++ ) {
-            std::cout << neighbors[j]->getId() << " ";
-        }
-        std::cout << std::endl;
-    }
-
-    /* initialize all agents */
-
+    print_network(network, NETWORK_SIZE);
+    
+    /* initialize the whole network, set neighbors */
     init_network(network, NETWORK_SIZE);
 
     srand(RANDOM_SEED);
@@ -137,7 +143,9 @@ int main() {
         HOUR hour = clock->getCurrentHour();
         int day = clock->getCurrentDay();
 
-        if(day == -1){
+        std::cout << "day " << day << "   hour " << hour << std::endl;
+
+        if ( day == -1 ) {
             // simulation ends
             break;
         }
@@ -155,11 +163,10 @@ int main() {
                 /* each agent has only one event each day */
 
                 /* initialize meeting events based on social network*/
-
                 createMeetingEvents(agentSet, network);
 
-                /* initialize social interaction events*/
 
+                /* initialize social interaction events*/
                 createSocialInterationEvents(agentSet, network);
 
                 /* Every agent executes the event in parallel */
@@ -176,6 +183,7 @@ int main() {
             }
             case SLEEPING:
                 // sleeping time, do nothing
+                std::cout << "Sleeping" << std::endl;
                 break;
 
             default:
@@ -186,9 +194,6 @@ int main() {
 
         /* statistics for each day */
     }
-
-
-    /* statistics */
 
 
 }
