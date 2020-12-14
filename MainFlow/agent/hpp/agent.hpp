@@ -26,6 +26,10 @@ private:
     void setIncubationPeriod();
     int mildPeriod;     // days
     void setMildPeriod();
+    int severePeriod;   // days
+    void setSeverePeriod();
+    int asymptomaticPeroid;     // days
+    void setAsymptomaticPeriod();   
 public:
     Agent(int number); // constructor
     Agent();    // default constructor

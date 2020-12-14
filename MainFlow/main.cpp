@@ -28,9 +28,9 @@ void createAgentSet(std::set<int> &set, Agent* network){
 
 void createSocialInterationEvents(std::set<int> &set, Agent* network) {
 
-    std::cout << "Creating social interaction events" << std::endl;
+    // std::cout << "Creating social interaction events" << std::endl;
 
-    std::cout << "People available " << set.size() << std::endl;
+    // std::cout << "People available " << set.size() << std::endl;
 
     if(set.empty()){
         return;
@@ -90,9 +90,9 @@ void createSocialInterationEvents(std::set<int> &set, Agent* network) {
 */
 void createMeetingEvents(std::set<int> &set, Agent* network){
 
-    std::cout << "creating meeting events" << std::endl;
+    // std::cout << "creating meeting events" << std::endl;
 
-    std::cout << "People available " << set.size() << std::endl;
+    // std::cout << "People available " << set.size() << std::endl;
 
     // initialize an event
     Event* event = new Meeting();
@@ -104,13 +104,13 @@ void createMeetingEvents(std::set<int> &set, Agent* network){
         auto search = set.find(agentID);
         // if a not dead agent has no event currently
         if(search != set.end() && network[agentID].getWellness() != DEAD) {
-            std::cout << "Select agent " << agentID;
+            // std::cout << "Select agent " << agentID;
             break;
         }
         agentID = rand() % NETWORK_SIZE;
     }
 
-    std::cout << std::endl;
+    // std::cout << std::endl;
 
     Agent* agent = &network[agentID];
 
@@ -124,7 +124,7 @@ void createMeetingEvents(std::set<int> &set, Agent* network){
     // delete the agent in set
     set.erase(agentID);
 
-    std::cout << "Selecting neighbor: ";
+    // std::cout << "Selecting neighbor: ";
     for(int i = 0; i < neighbors.size(); i++){
         
         Agent* neighbor = neighbors[i];
@@ -136,11 +136,11 @@ void createMeetingEvents(std::set<int> &set, Agent* network){
             float probability = rand() / float(RAND_MAX);
 
             if(probability < EXECUTE_METTING_EVENT){
-                std::cout  << neighbor->getId() << " ";
+                // std::cout  << neighbor->getId() << " ";
                 neighbor->setEvent(event);
                 event->increment(neighbor->getWellness());
                 set.erase(neighbor->getId());
-            }else{
+            } else {
                 event = new StayAlone();
                 neighbor->setEvent(event);
                 set.erase(neighbor->getId());
@@ -149,7 +149,7 @@ void createMeetingEvents(std::set<int> &set, Agent* network){
         }
     }
     
-    std::cout << std::endl;
+    // std::cout << std::endl;
 }
 
 /**
@@ -166,7 +166,6 @@ void print_network(Agent* network, int NETWORK_SIZE) {
             std::cout << neighbors[j]->getId() << " ";
         }
         std::cout << std::endl;
-
     }
 }
 
@@ -175,19 +174,6 @@ void print_network(Agent* network, int NETWORK_SIZE) {
  * @Description execute the events
 */
 void agentEventExecution(Agent* network, int NETWORK_SIZE) {
-
-    /* print events for each agent */
-    /*
-    for ( int i = 0; i < NETWORK_SIZE; i++ ) {
-
-        Agent agent = network[i];
-        Event* event = agent.getEvent();
-
-        if ( event != NULL ) {
-            // std::cout << "Agent " << i << ": " << event->name() << std::endl;
-        }
-    }
-    */
 
     // execute the events in each agent in parallel
     for ( int i = 0; i < NETWORK_SIZE; i++ ) {
@@ -293,7 +279,6 @@ int main() {
     /* set agent id */
     std::cout << "set agent id" << std::endl;
     init_agents(network, NETWORK_SIZE, INITIAL_NUM_OF_PRESYMTOMATIC);
-    printAgentState(network, NETWORK_SIZE);
 
     /* initialize the network */
     std::cout << "initialize the network..." << std::endl;
@@ -322,20 +307,12 @@ int main() {
         std::set<int> agentSet;
         createAgentSet(agentSet, network);
 
-        // for(int id:agentSet){
-        //     std::cout << id << std::endl;
-        // }
-
-        
         switch (hour)
         {
             case WORKING:
-            {
-
+            
                 /* generate an event for each agent for each hour */
                 /* each agent has only one event each day */
-
-                std::cout << "Population: " << agentSet.size() << std::endl;
 
                 /* initialize meeting events based on social network*/
                 createMeetingEvents(agentSet, network);
@@ -347,14 +324,8 @@ int main() {
                 agentEventExecution(network, NETWORK_SIZE);
                 /* barrier */
 
-                /* Every agent updates the state in parallel */
-                updateAgentState(network, NETWORK_SIZE);
-                /* barrier */
-
-                // printAgentState(network, NETWORK_SIZE);
-
                 break;
-            }
+            
             case SLEEPING:
                 // sleeping time, do nothing
                 // std::cout << "Sleeping" << std::endl;
@@ -363,6 +334,10 @@ int main() {
             default:
                 break;
         }
+
+        /* Every agent updates the state in parallel */
+        updateAgentState(network, NETWORK_SIZE);
+        /* barrier */
 
         clock->nextHour();
         if (hourNum == 23) {

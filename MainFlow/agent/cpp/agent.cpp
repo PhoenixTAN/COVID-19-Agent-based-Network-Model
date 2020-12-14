@@ -71,6 +71,7 @@ void Agent::executeEvent()
             probability = rand() / (double) RAND_MAX;
             if (probability <= INFECTIOUS_TO_ASYMPTOMATIC) {
                 this->setNextState(ASYMPTOMATIC);
+                this->setAsymptomaticPeriod();
             } else {
                 this->setNextState(PRESYMPTOMATIC);
                 this->setIncubationPeriod();
@@ -81,32 +82,35 @@ void Agent::executeEvent()
         // non transmission event
         switch (this->wellness) {
             case PRESYMPTOMATIC:
-                /*if (probability <= PRESYMPTOMATIC_TO_MILD) {
-                    this->setNextState(MILD);
-                }*/
-                if ( this->stateDurationHours % 24 >= this->incubationPeriod) {
+                if ( this->stateDurationHours / 24 >= this->incubationPeriod) {
                     this->setNextState(MILD);
                     this->setMildPeriod();
                 }
                 break;
             case ASYMPTOMATIC:
-                if (probability <= ASYMPTOMATIC_TO_RECOVERED){
+                if ( this->stateDurationHours / 24 >= this->asymptomaticPeroid ) {
                     this->setNextState(RECOVERED);
                 }
                 break;
             case MILD:
-                if (probability <= MILD_TO_SEVERE){
-                    this->setNextState(SEVERE);
-                }else if (probability <= MILD_TO_RECOVERED + MILD_TO_SEVERE){
-                    this->setNextState(RECOVERED);
+                if ( this->stateDurationHours / 24 >= this->mildPeriod ) {
+                    if (probability <= MILD_TO_SEVERE){
+                        this->setNextState(SEVERE);
+                        this->setSeverePeriod();
+                    } else {
+                        this->setNextState(RECOVERED);
+                    }
                 }
                 break;
             case SEVERE:
-                if (probability <= SEVERE_TO_DEAD){
-                    this->setNextState(DEAD);
-                }else if (probability <= SEVERE_TO_RECOVERED + SEVERE_TO_DEAD){
-                    this->setNextState(RECOVERED);
+                if ( this->stateDurationHours / 24 >= this->severePeriod ) {
+                    if ( probability <= SEVERE_TO_DEAD ){
+                        this->setNextState(DEAD);
+                    }else {
+                        this->setNextState(RECOVERED);
+                    }
                 }
+                
                 break;
             default:
                 break;
@@ -114,7 +118,7 @@ void Agent::executeEvent()
     }
 
     this->event = NULL;
-    this->stateDurationHours++;
+    
 };
 
 void Agent::setNextState(WELLNESS nextState)
@@ -134,10 +138,13 @@ void Agent::setEvent(Event* event)
 
 void Agent::updateWellness()
 {
-    if (this->nextState != INIT) {
+    if (this->nextState != INIT && this->wellness != this->nextState) {
         this->wellness = this->nextState;
         this->nextState = INIT;
         this->stateDurationHours = 1;
+    }
+    else {
+        this->stateDurationHours++;
     }
 };
 
@@ -174,16 +181,25 @@ void Agent::setIncubationPeriod() {
         incubationDays = std::lround(N(DEFAULT_RANDOM_ENGINE));
     }
 
-    // std::cout << "Setting incubation days: " << incubationDays << std::endl;
-
+    //std::cout << "Setting incubation days: " << incubationDays << std::endl;
     this->incubationPeriod = incubationDays;
 }
 
 void Agent::setMildPeriod() {
 
-    int mildDays = rand() % MILD_PERIOD;
-    std::cout << "Setting mild period: " << mildDays << std::endl;
-
+    int mildDays = rand() % MILD_PERIOD + MIN_MILD_PERIOD;
+    //std::cout << "Setting mild period: " << mildDays << std::endl;
     this->mildPeriod = mildDays;
 
+}
+
+void Agent::setSeverePeriod() {
+    int severeDays = rand() % SEVERE_PERIOD + MIN_SEVERE_PERIOD;
+    //std::cout << "Setting mild period: " << severeDays << std::endl;
+    this->severePeriod = severeDays;
+}
+
+void Agent::setAsymptomaticPeriod() {
+    int asymptomaticDays = rand() % ASYMPTOMATIC_PERIOD + MIN_ASYMPTOMATIC_PEROID;
+    this->asymptomaticPeroid = asymptomaticDays;
 }
