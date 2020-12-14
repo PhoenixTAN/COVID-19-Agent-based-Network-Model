@@ -74,7 +74,7 @@ void Agent::executeEvent()
                 this->setAsymptomaticPeriod();
             } else {
                 this->setNextState(PRESYMPTOMATIC);
-                this->setIncubationPeriod();
+                this->setIncubationPeriod(false);
             }
         }
 
@@ -171,8 +171,17 @@ void Agent::setWellness(WELLNESS state) {
     this->wellness = state;
 }
 
+/**
+ * @Author Ziqi Tan
+ * @param bool default: if true, use the INCUBATION_EXPECTATION as the incubation period.
+ *                      if false, use normal distribution.
+*/
+void Agent::setIncubationPeriod(bool defaultPeriod) {
 
-void Agent::setIncubationPeriod() {
+    if (defaultPeriod) {
+        this->incubationPeriod = INCUBATION_EXPECTATION;
+        return ;
+    }
     
     std::normal_distribution<float> N(INCUBATION_EXPECTATION, INCUBATION_VARIANCE);
 
@@ -181,21 +190,16 @@ void Agent::setIncubationPeriod() {
         incubationDays = std::lround(N(DEFAULT_RANDOM_ENGINE));
     }
 
-    //std::cout << "Setting incubation days: " << incubationDays << std::endl;
     this->incubationPeriod = incubationDays;
 }
 
 void Agent::setMildPeriod() {
-
     int mildDays = rand() % (MAX_MILD_PERIOD - MIN_MILD_PERIOD) + MIN_MILD_PERIOD;
-    //std::cout << "Setting mild period: " << mildDays << std::endl;
     this->mildPeriod = mildDays;
-
 }
 
 void Agent::setSeverePeriod() {
     int severeDays = rand() % (MAX_SEVERE_PERIOD - MIN_MILD_PERIOD ) + MIN_SEVERE_PERIOD;
-    //std::cout << "Setting mild period: " << severeDays << std::endl;
     this->severePeriod = severeDays;
 }
 
