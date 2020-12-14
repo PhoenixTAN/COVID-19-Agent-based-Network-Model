@@ -22,6 +22,10 @@ private:
     Event* event;
     std::vector<Agent*> neighbors;
     int stateDurationHours;      // hours, the duration of the current state
+    int incubationPeriod;   // days
+    void setIncubationPeriod();
+    int mildPeriod;     // days
+    void setMildPeriod();
 public:
     Agent(int number); // constructor
     Agent();    // default constructor

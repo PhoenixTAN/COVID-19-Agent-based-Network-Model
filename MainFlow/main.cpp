@@ -1,6 +1,7 @@
 #include <iostream>
 #include <set>
 #include <ctime>    /* time seed */
+#include <fstream>
 #include "params.hpp"
 #include "agent/hpp/agent.hpp"
 #include "event/hpp/event.hpp"
@@ -12,6 +13,8 @@
 #include "event/hpp/transmission_event.hpp"
 #include "event/hpp/social_activity.hpp"
 #include "event/hpp/stay_alone.hpp"
+
+std::ofstream OutFile("statistics.txt");
 
 /**
  * @Author Xueyan Xia
@@ -105,7 +108,6 @@ void createMeetingEvents(std::set<int> &set, Agent* network){
             break;
         }
         agentID = rand() % NETWORK_SIZE;
-        std::cout << " Random agent id: " << agentID;
     }
 
     std::cout << std::endl;
@@ -175,15 +177,17 @@ void print_network(Agent* network, int NETWORK_SIZE) {
 void agentEventExecution(Agent* network, int NETWORK_SIZE) {
 
     /* print events for each agent */
+    /*
     for ( int i = 0; i < NETWORK_SIZE; i++ ) {
 
         Agent agent = network[i];
         Event* event = agent.getEvent();
 
         if ( event != NULL ) {
-            std::cout << "Agent " << i << ": " << event->name() << std::endl;
+            // std::cout << "Agent " << i << ": " << event->name() << std::endl;
         }
     }
+    */
 
     // execute the events in each agent in parallel
     for ( int i = 0; i < NETWORK_SIZE; i++ ) {
@@ -200,6 +204,10 @@ void updateAgentState(Agent* network, int NETWORK_SIZE) {
     }
 }
 
+/**
+ * @Author print state in terminal and file system
+ * 
+*/
 void printAgentState(Agent* network, int NETWORK_SIZE) {
 
     int numOfSusceptible = 0;
@@ -240,6 +248,7 @@ void printAgentState(Agent* network, int NETWORK_SIZE) {
                 break;
         }
     }
+    /*
     std::cout << "numOfSusceptible: " << numOfSusceptible << std::endl;
     std::cout << "numOfPresymptomatic: " << numOfPresymptomatic << std::endl;
     std::cout << "numOfAsymptomatic: " << numOfAsymptomatic << std::endl;
@@ -247,7 +256,9 @@ void printAgentState(Agent* network, int NETWORK_SIZE) {
     std::cout << "numOfSevere: " << numOfSevere << std::endl;
     std::cout << "numOfRecovered: " << numOfRecovered << std::endl;
     std::cout << "numOfDead: " << numOfDead << std::endl;
-
+    */
+    
+    /*
     std::cout << "Total number: " << 
         numOfSusceptible + 
         numOfPresymptomatic + 
@@ -257,12 +268,21 @@ void printAgentState(Agent* network, int NETWORK_SIZE) {
         numOfRecovered + 
         numOfDead
     << std::endl;
+    */
 
+    /* print the statistics to txt file */
+    OutFile << numOfSusceptible << " " 
+            << numOfPresymptomatic << " "
+            << numOfAsymptomatic << " "
+            << numOfMild << " "
+            << numOfSevere << " "
+            << numOfRecovered << " "
+            << numOfDead << " "
+    << std::endl;
+    
 }
 
 int main() {
-    Event *event1 = new Meeting();
-    std::cout << typeid(*event1).name() << std::endl;
 
     /* Initialize the clock */
     Clock* clock = Clock::getInstance();
@@ -331,7 +351,7 @@ int main() {
                 updateAgentState(network, NETWORK_SIZE);
                 /* barrier */
 
-                printAgentState(network, NETWORK_SIZE);
+                // printAgentState(network, NETWORK_SIZE);
 
                 break;
             }
@@ -345,8 +365,12 @@ int main() {
         }
 
         clock->nextHour();
+        if (hourNum == 23) {
+            printAgentState(network, NETWORK_SIZE);
+        }
 
         /* statistics for each day */
     }
 
+    OutFile.close();
 }

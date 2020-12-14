@@ -13,7 +13,8 @@
 #include "../../params.hpp"
 
 #include <cmath>
-
+#include <iostream>
+#include <random>
 
 Agent::Agent(int id)
 {
@@ -72,8 +73,7 @@ void Agent::executeEvent()
                 this->setNextState(ASYMPTOMATIC);
             } else {
                 this->setNextState(PRESYMPTOMATIC);
-                // set incubation period
-                
+                this->setIncubationPeriod();
             }
         }
 
@@ -81,8 +81,12 @@ void Agent::executeEvent()
         // non transmission event
         switch (this->wellness) {
             case PRESYMPTOMATIC:
-                if (probability <= PRESYMPTOMATIC_TO_MILD) {
+                /*if (probability <= PRESYMPTOMATIC_TO_MILD) {
                     this->setNextState(MILD);
+                }*/
+                if ( this->stateDurationHours % 24 >= this->incubationPeriod) {
+                    this->setNextState(MILD);
+                    this->setMildPeriod();
                 }
                 break;
             case ASYMPTOMATIC:
@@ -109,8 +113,8 @@ void Agent::executeEvent()
         }
     }
 
-    // TODO
     this->event = NULL;
+    this->stateDurationHours++;
 };
 
 void Agent::setNextState(WELLNESS nextState)
@@ -158,4 +162,28 @@ bool Agent::hasNeighbor(int neighborId) {
 
 void Agent::setWellness(WELLNESS state) {
     this->wellness = state;
+}
+
+
+void Agent::setIncubationPeriod() {
+    
+    std::normal_distribution<float> N(INCUBATION_EXPECTATION, INCUBATION_VARIANCE);
+
+    int incubationDays = std::lround(N(DEFAULT_RANDOM_ENGINE));
+    while ( incubationDays < 0 && incubationDays > INCUBATION_PEROID ) {
+        incubationDays = std::lround(N(DEFAULT_RANDOM_ENGINE));
+    }
+
+    // std::cout << "Setting incubation days: " << incubationDays << std::endl;
+
+    this->incubationPeriod = incubationDays;
+}
+
+void Agent::setMildPeriod() {
+
+    int mildDays = rand() % MILD_PERIOD;
+    std::cout << "Setting mild period: " << mildDays << std::endl;
+
+    this->mildPeriod = mildDays;
+
 }

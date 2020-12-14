@@ -2,19 +2,22 @@
 #define PARAMS_H
 
 #include <algorithm>    // std::max
+#include <random>
+
+extern std::default_random_engine DEFAULT_RANDOM_ENGINE;
 
 const static unsigned int RANDOM_SEED = 10;
 
-const static int SIMULATION_DAYS = 1;
-const static int NETWORK_SIZE = 20;
+const static int SIMULATION_DAYS = 10;
+const static int NETWORK_SIZE = 50;
 
 const static int MAXIMUM_NUM_OF_SOCIAL_EVENT_IN_A_HOUR = 5;
 const static int MINIMUM_NUM_OF_SOCIAL_EVENT_IN_A_HOUR = 2;
+const static float EXECUTE_SOCIAL_EVENT = 0.5;
+const static float EXECUTE_METTING_EVENT = 0.7;
 
 static int INITIAL_NUM_OF_PRESYMTOMATIC = std::max(5, NETWORK_SIZE / 1000);
 
-const static float EXECUTE_SOCIAL_EVENT = 0.5;
-const static float EXECUTE_METTING_EVENT = 0.7;
 
 /* the probability of transfering from susceptible to presymptomatic 
 if get infected */
@@ -23,14 +26,22 @@ const static float INFECTIOUS_TO_ASYMPTOMATIC = 0.2;
 
 /* It may take 1 ~ 14 days to show symtoms */
 const static float PRESYMPTOMATIC_TO_MILD = 0.25;
-const static int INCUBATION_PEROID = 14;
-const static int INCUBATION_EXPECTATION = 7;
-const static int INCUBATION_VARIANCE = 3;
+const static int INCUBATION_PEROID = 14;        // days
+const static int INCUBATION_EXPECTATION = 7;    // days
+const static int INCUBATION_VARIANCE = 3;       // days
+
 
 const static float ASYMPTOMATIC_TO_RECOVERED = 0.3;
 
-const static float MILD_TO_SEVERE = 0.3;
+/* after this period, agent will have high probability to get severe */
+const static int MILD_PERIOD = 4;       // days
+const static float MILD_TO_SEVERE = 0.6;
 const static float MILD_TO_RECOVERED = 0.3;
+
+const static int SEVERE_PERIOD = 5;     // days
+
+
+
 
 const static float SEVERE_TO_RECOVERED = 0.3;
 const static float SEVERE_TO_DEAD = 0.1;
