@@ -176,6 +176,7 @@ void print_network(Agent* network, int NETWORK_SIZE) {
 void agentEventExecution(Agent* network, int NETWORK_SIZE) {
 
     // execute the events in each agent in parallel
+    #pragma omp parallel for num_threads(MAX_NUM_OF_THREADS)
     for ( int i = 0; i < NETWORK_SIZE; i++ ) {
         Agent* agent = &network[i];
         agent->executeEvent();
@@ -184,6 +185,8 @@ void agentEventExecution(Agent* network, int NETWORK_SIZE) {
 }
 
 void updateAgentState(Agent* network, int NETWORK_SIZE) {
+
+    #pragma omp parallel for num_threads(MAX_NUM_OF_THREADS)
     for ( int i = 0; i < NETWORK_SIZE; i++ ) {
         Agent* agent = &network[i];
         agent->updateWellness();

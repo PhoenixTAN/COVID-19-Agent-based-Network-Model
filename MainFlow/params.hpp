@@ -7,6 +7,7 @@
 extern std::default_random_engine DEFAULT_RANDOM_ENGINE;
 
 const static unsigned int RANDOM_SEED = 10;
+extern int MAX_NUM_OF_THREADS;
 
 const static int SIMULATION_DAYS = 30;
 const static int NETWORK_SIZE = 100;

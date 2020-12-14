@@ -57,9 +57,6 @@ void Event::setNumOfDead(int numOfDead) {
 void Event::increment(WELLNESS wellness){
     switch (wellness)
     {
-        case SUSCEPTIBLE:
-            this->numOfSusceptible++;
-            break;
         case ASYMPTOMATIC:
             this->numOfAsymptomatic++;
             break;
@@ -71,12 +68,6 @@ void Event::increment(WELLNESS wellness){
             break;
         case SEVERE:
             this->numOfSevere++;
-            break;
-        case DEAD:
-            this->numOfDead++;
-            break;
-        case RECOVERED:
-            this->numOfRecovered++;
             break;
         default:
             break;
