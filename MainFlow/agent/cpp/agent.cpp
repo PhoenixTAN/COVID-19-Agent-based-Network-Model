@@ -61,9 +61,9 @@ void Agent::executeEvent()
         double temp = 1.0;
 
         temp *= pow(1.0 - INFECTION_RATE_MILD, this->event->getNumOfMild());
-        temp *= pow(1.0 - INFECTION_RATE_MILD, this->event->getNumOfSevere());
-        temp *= pow(1.0 - INFECTION_RATE_MILD, this->event->getNumOfPresymptomatic());
-        temp *= pow(1.0 - INFECTION_RATE_MILD, this->event->getNumOfAsymptomatic());
+        temp *= pow(1.0 - INFECTION_RATE_SEVERE, this->event->getNumOfSevere());
+        temp *= pow(1.0 - INFECTION_RATE_PRESYMPTOMATIC, this->event->getNumOfPresymptomatic());
+        temp *= pow(1.0 - INFECTION_RATE_ASYMPTOMATIC, this->event->getNumOfAsymptomatic());
 
         infectedProbability -= temp;
 
@@ -177,7 +177,7 @@ void Agent::setIncubationPeriod() {
     std::normal_distribution<float> N(INCUBATION_EXPECTATION, INCUBATION_VARIANCE);
 
     int incubationDays = std::lround(N(DEFAULT_RANDOM_ENGINE));
-    while ( incubationDays < 0 && incubationDays > INCUBATION_PEROID ) {
+    while ( incubationDays < MIN_INCUBATION_PERIOD && incubationDays > MAX_INCUBATION_PEROID ) {
         incubationDays = std::lround(N(DEFAULT_RANDOM_ENGINE));
     }
 
@@ -187,19 +187,19 @@ void Agent::setIncubationPeriod() {
 
 void Agent::setMildPeriod() {
 
-    int mildDays = rand() % MILD_PERIOD + MIN_MILD_PERIOD;
+    int mildDays = rand() % (MAX_MILD_PERIOD - MIN_MILD_PERIOD) + MIN_MILD_PERIOD;
     //std::cout << "Setting mild period: " << mildDays << std::endl;
     this->mildPeriod = mildDays;
 
 }
 
 void Agent::setSeverePeriod() {
-    int severeDays = rand() % SEVERE_PERIOD + MIN_SEVERE_PERIOD;
+    int severeDays = rand() % (MAX_SEVERE_PERIOD - MIN_MILD_PERIOD ) + MIN_SEVERE_PERIOD;
     //std::cout << "Setting mild period: " << severeDays << std::endl;
     this->severePeriod = severeDays;
 }
 
 void Agent::setAsymptomaticPeriod() {
-    int asymptomaticDays = rand() % ASYMPTOMATIC_PERIOD + MIN_ASYMPTOMATIC_PEROID;
+    int asymptomaticDays = rand() % (MAX_ASYMPTOMATIC_PERIOD - MIN_ASYMPTOMATIC_PEROID) + MIN_ASYMPTOMATIC_PEROID;
     this->asymptomaticPeroid = asymptomaticDays;
 }

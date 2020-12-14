@@ -1,5 +1,5 @@
 main: main.cpp init.o agent.o event.o meeting.o non_transmission_event.o social_activity.o stay_alone.o transmission_event.o clock.o hour.o params.o
-	g++ -o main main.cpp init.o agent.o event.o meeting.o non_transmission_event.o social_activity.o stay_alone.o transmission_event.o clock.o hour.o params.o
+	g++ -fopenmp -o main main.cpp init.o agent.o event.o meeting.o non_transmission_event.o social_activity.o stay_alone.o transmission_event.o clock.o hour.o params.o
 
 params.o: params.cpp
 	g++ -c -o params.o params.cpp

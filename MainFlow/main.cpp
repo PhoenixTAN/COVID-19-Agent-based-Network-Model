@@ -1,7 +1,8 @@
 #include <iostream>
 #include <set>
 #include <ctime>    /* time seed */
-#include <fstream>
+#include <fstream>  /* file stream */
+#include <omp.h>    /* OpenMP */
 #include "params.hpp"
 #include "agent/hpp/agent.hpp"
 #include "event/hpp/event.hpp"
@@ -28,16 +29,12 @@ void createAgentSet(std::set<int> &set, Agent* network){
 
 void createSocialInterationEvents(std::set<int> &set, Agent* network) {
 
-    // std::cout << "Creating social interaction events" << std::endl;
-
-    // std::cout << "People available " << set.size() << std::endl;
-
     if(set.empty()){
         return;
     }
 
     // the number of agents who will execute this event
-    int numberOfAgents = rand() % (MAXIMUM_NUM_OF_SOCIAL_EVENT_IN_A_HOUR - MINIMUM_NUM_OF_SOCIAL_EVENT_IN_A_HOUR) + MINIMUM_NUM_OF_SOCIAL_EVENT_IN_A_HOUR;
+    int numberOfAgents = rand() % (MAXIMUM_NUM_OF_AGENTS_EACH_SOCIAL_EVENT -  MINIMUM_NUM_OF_AGENTS_SOCIAL_EVENT) + MINIMUM_NUM_OF_AGENTS_SOCIAL_EVENT;
 
     if(set.size() < numberOfAgents){
         return;
@@ -90,10 +87,6 @@ void createSocialInterationEvents(std::set<int> &set, Agent* network) {
 */
 void createMeetingEvents(std::set<int> &set, Agent* network){
 
-    // std::cout << "creating meeting events" << std::endl;
-
-    // std::cout << "People available " << set.size() << std::endl;
-
     // initialize an event
     Event* event = new Meeting();
 
@@ -124,7 +117,6 @@ void createMeetingEvents(std::set<int> &set, Agent* network){
     // delete the agent in set
     set.erase(agentID);
 
-    // std::cout << "Selecting neighbor: ";
     for(int i = 0; i < neighbors.size(); i++){
         
         Agent* neighbor = neighbors[i];
@@ -136,7 +128,6 @@ void createMeetingEvents(std::set<int> &set, Agent* network){
             float probability = rand() / float(RAND_MAX);
 
             if(probability < EXECUTE_METTING_EVENT){
-                // std::cout  << neighbor->getId() << " ";
                 neighbor->setEvent(event);
                 event->increment(neighbor->getWellness());
                 set.erase(neighbor->getId());
@@ -148,8 +139,7 @@ void createMeetingEvents(std::set<int> &set, Agent* network){
 
         }
     }
-    
-    // std::cout << std::endl;
+
 }
 
 /**
@@ -210,7 +200,7 @@ void printAgentState(Agent* network, int NETWORK_SIZE) {
     for ( int i = 0; i < NETWORK_SIZE; i++ ) {
         Agent* agent = &network[i];
         WELLNESS state = agent->getWellness();
-        // std::cout << "Agent " << i << ": " << state << std::endl;
+
         switch (state) {
             case SUSCEPTIBLE:
                 numOfSusceptible++;
@@ -237,27 +227,6 @@ void printAgentState(Agent* network, int NETWORK_SIZE) {
                 break;
         }
     }
-    /*
-    std::cout << "numOfSusceptible: " << numOfSusceptible << std::endl;
-    std::cout << "numOfPresymptomatic: " << numOfPresymptomatic << std::endl;
-    std::cout << "numOfAsymptomatic: " << numOfAsymptomatic << std::endl;
-    std::cout << "numOfMild: " << numOfMild << std::endl;
-    std::cout << "numOfSevere: " << numOfSevere << std::endl;
-    std::cout << "numOfRecovered: " << numOfRecovered << std::endl;
-    std::cout << "numOfDead: " << numOfDead << std::endl;
-    */
-    
-    /*
-    std::cout << "Total number: " << 
-        numOfSusceptible + 
-        numOfPresymptomatic + 
-        numOfAsymptomatic + 
-        numOfMild + 
-        numOfSevere + 
-        numOfRecovered + 
-        numOfDead
-    << std::endl;
-    */
 
     /* print the statistics to txt file */
     OutFile << numOfSusceptible << " " 
@@ -288,9 +257,11 @@ int main() {
     init_network(network, NETWORK_SIZE);
 
     /* print network */
-    print_network(network, NETWORK_SIZE);
+    // print_network(network, NETWORK_SIZE);
 
     srand(RANDOM_SEED);
+
+    std::cout << "Max thread: " << MAX_NUM_OF_THREADS << std::endl;
 
     // while loop for every hour
     while(true){
@@ -299,7 +270,7 @@ int main() {
         int day = clock->getCurrentDay();
         int hourNum = clock->getCurrentHourNum();
 
-        std::cout << "day " << day << "   hour " << hourNum << std::endl;
+        // std::cout << "day " << day << "   hour " << hourNum << std::endl;
 
         if ( day == -1 ) {
             // simulation ends
@@ -313,16 +284,19 @@ int main() {
         switch (hour)
         {
             case WORKING:
-            
                 /* generate an event for each agent for each hour */
-                /* each agent has only one event each day */
+                /* each agent has only one event each hour */
 
                 /* initialize meeting events based on social network*/
-                createMeetingEvents(agentSet, network);
-
+                for ( int i = 0; i < NUM_OF_MEETING_EACH_HOUR; i++ ) {
+                    createMeetingEvents(agentSet, network);
+                }
+                
                 /* initialize social interaction events*/
-                createSocialInterationEvents(agentSet, network);
-
+                for ( int i = 0; i < NUM_OF_SOCIAL_EACH_HOUR; i++ ) {
+                    createSocialInterationEvents(agentSet, network);
+                }
+                
                 /* Every agent executes the event in parallel */
                 agentEventExecution(network, NETWORK_SIZE);
                 /* barrier */
@@ -331,7 +305,6 @@ int main() {
             
             case SLEEPING:
                 // sleeping time, do nothing
-                // std::cout << "Sleeping" << std::endl;
                 break;
 
             default:
@@ -344,6 +317,7 @@ int main() {
 
         clock->nextHour();
         if (hourNum == 23) {
+            std::cout << "day " << day << std::endl;
             printAgentState(network, NETWORK_SIZE);
         }
 
