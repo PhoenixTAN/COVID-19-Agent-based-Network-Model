@@ -249,7 +249,6 @@ int main() {
     Agent* network = new Agent[NETWORK_SIZE];
 
     /* set agent id */
-    std::cout << "set agent id" << std::endl;
     init_agents(network, NETWORK_SIZE, INITIAL_NUM_OF_PRESYMTOMATIC);
 
     /* initialize the network */
@@ -270,8 +269,6 @@ int main() {
         int day = clock->getCurrentDay();
         int hourNum = clock->getCurrentHourNum();
 
-        // std::cout << "day " << day << "   hour " << hourNum << std::endl;
-
         if ( day == -1 ) {
             // simulation ends
             break;
@@ -286,7 +283,6 @@ int main() {
             case WORKING:
                 /* generate an event for each agent for each hour */
                 /* each agent has only one event each hour */
-
                 /* initialize meeting events based on social network*/
                 for ( int i = 0; i < NUM_OF_MEETING_EACH_HOUR; i++ ) {
                     createMeetingEvents(agentSet, network);
@@ -315,13 +311,16 @@ int main() {
         updateAgentState(network, NETWORK_SIZE);
         /* barrier */
 
+        /* go on to the next hour */
         clock->nextHour();
+
+        /* statistics for each day */
         if (hourNum == 23) {
             std::cout << "day " << day << std::endl;
             printAgentState(network, NETWORK_SIZE);
         }
 
-        /* statistics for each day */
+        
     }
 
     OutFile.close();

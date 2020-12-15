@@ -65,6 +65,7 @@ void init_agents(Agent* network, int NETWORK_SIZE, int INITIAL_NUM_OF_PRESYMTOMA
     while ( infected < INITIAL_NUM_OF_PRESYMTOMATIC) {
         int agentID = rand() % NETWORK_SIZE;
         network[agentID].setWellness(PRESYMPTOMATIC);
+        network[agentID].setIncubationPeriod(true);     // true: default incubation period
         infected++;
     }
 }

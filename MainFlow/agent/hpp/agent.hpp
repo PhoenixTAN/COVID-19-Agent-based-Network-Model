@@ -23,7 +23,6 @@ private:
     std::vector<Agent*> neighbors;
     int stateDurationHours;      // hours, the duration of the current state
     int incubationPeriod;   // days
-    void setIncubationPeriod();
     int mildPeriod;     // days
     void setMildPeriod();
     int severePeriod;   // days
@@ -46,6 +45,7 @@ public:
     std::vector<Agent*> getNeighbors();
     void addNeighbor(Agent* agent);
     bool hasNeighbor(int neighborId);
+    void setIncubationPeriod(bool defaultPeriod);
 };
 
 #endif /* Agent_hpp */
