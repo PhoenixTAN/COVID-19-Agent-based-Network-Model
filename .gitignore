@@ -3,3 +3,5 @@
 *.o
 .vscode
 *.exe
+.DS_Store
+.ipynb_checkpoints
