@@ -11,8 +11,6 @@
 #include "wellness.hpp"
 #include <vector>
 
-
-
 class Agent
 {
 private:

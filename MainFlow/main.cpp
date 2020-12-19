@@ -183,20 +183,32 @@ void updateAgentState(Agent* network, int NETWORK_SIZE) {
     }
 }
 
+
+static int numOfSusceptible = 0;
+static int numOfPresymptomatic = 0;
+static int numOfAsymptomatic = 0;
+static int numOfMild = 0;
+static int numOfRecovered = 0;
+static int numOfSevere = 0;
+static int numOfDead = 0;
+
+/* create the network */
+Agent* network = new Agent[NETWORK_SIZE];
+
 /**
  * @Author print state in terminal and file system
  * 
 */
 void printAgentState(Agent* network, int NETWORK_SIZE) {
 
-    int numOfSusceptible = 0;
-    int numOfPresymptomatic = 0;
-    int numOfAsymptomatic = 0;
-    int numOfMild = 0;
-    int numOfRecovered = 0;
-    int numOfSevere = 0;
-    int numOfDead = 0;
-    
+    numOfSusceptible = 0;
+    numOfPresymptomatic = 0;
+    numOfAsymptomatic = 0;
+    numOfMild = 0;
+    numOfRecovered = 0;
+    numOfSevere = 0;
+    numOfDead = 0;
+
     for ( int i = 0; i < NETWORK_SIZE; i++ ) {
         Agent* agent = &network[i];
         WELLNESS state = agent->getWellness();
@@ -245,9 +257,6 @@ int main() {
     /* Initialize the clock */
     Clock* clock = Clock::getInstance();
 
-    /* create the network */
-    Agent* network = new Agent[NETWORK_SIZE];
-
     /* set agent id */
     init_agents(network, NETWORK_SIZE, INITIAL_NUM_OF_PRESYMTOMATIC);
 
@@ -277,19 +286,38 @@ int main() {
         // create a hash set for Agents' id
         std::set<int> agentSet;
         createAgentSet(agentSet, network);
-
+        int intervention_level = 0;
         switch (hour)
         {
             case WORKING:
                 /* generate an event for each agent for each hour */
                 /* each agent has only one event each hour */
-                /* initialize meeting events based on social network*/
-                for ( int i = 0; i < NUM_OF_MEETING_EACH_HOUR; i++ ) {
+                /* initialize meeting events based on social network */
+
+                
+                if ( numOfDead / (float)NETWORK_SIZE > THRESHOLD3_OF_DEATH ) {
+                    intervention_level = 5;
+                }
+                else if ( numOfDead > THRESHOLD2_OF_DEATH ) {
+                    intervention_level = 4;
+                }
+                else if ( numOfDead > THRESHOLD_OF_DEATH ) {
+                    intervention_level = 3;
+                }
+                else if ( numOfMild + numOfSevere > THRESHOLD2_OF_MILD_SEVERE ) {
+                    intervention_level = 2;
+                }
+                else if ( numOfMild + numOfSevere > THRESHOLD_OF_MILD_SEVERE ) {
+                    intervention_level = 1;
+                }
+
+
+                for ( int i = 0; i < NUM_OF_MEETING_EACH_HOUR * FACTOR_OF_EVENTS[intervention_level]; i++ ) {
                     createMeetingEvents(agentSet, network);
                 }
-                
+
                 /* initialize social interaction events*/
-                for ( int i = 0; i < NUM_OF_SOCIAL_EACH_HOUR; i++ ) {
+                for ( int i = 0; i < NUM_OF_SOCIAL_EACH_HOUR * FACTOR_OF_EVENTS[intervention_level]; i++ ) {
                     createSocialInterationEvents(agentSet, network);
                 }
                 

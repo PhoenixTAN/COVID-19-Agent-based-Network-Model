@@ -8,4 +8,3 @@ int MAX_NUM_OF_THREADS = omp_get_max_threads();
 
 
 
-

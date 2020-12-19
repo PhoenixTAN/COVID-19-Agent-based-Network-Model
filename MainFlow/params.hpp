@@ -14,7 +14,7 @@ extern int MAX_NUM_OF_THREADS;
 
 /* Network */
 const static int SIMULATION_DAYS = 120;
-const static int NETWORK_SIZE = 10000;  
+const static int NETWORK_SIZE = 60000;  
 
 /* Event generator */
 const static int MAXIMUM_NUM_OF_AGENTS_EACH_SOCIAL_EVENT = 30;
@@ -25,11 +25,11 @@ const static int NUM_OF_MEETING_EACH_HOUR = 20;
 const static int NUM_OF_SOCIAL_EACH_HOUR = 40;
 
 /* P{ i get infect when agent j state is mild} = a */
-const static float INFECTION_RATE_MILD = 0.6;
+const static float INFECTION_RATE_MILD = 0.7;
 /* P{ i get infect when agent j state is severe} = b */
-const static float INFECTION_RATE_SEVERE = 0.7;
+const static float INFECTION_RATE_SEVERE = 0.8;
 /* P{ i get infect when agent j state is presymptomatic} = c */
-const static float INFECTION_RATE_PRESYMPTOMATIC = 0.5;
+const static float INFECTION_RATE_PRESYMPTOMATIC = 0.6;
 /* P{ i get infect when agent j state is asymptomatic} = d */
 const static float INFECTION_RATE_ASYMPTOMATIC = 0.3;
 
@@ -58,5 +58,30 @@ const static float MILD_TO_SEVERE = 0.6;    // probability
 const static int MAX_SEVERE_PERIOD = 9;         // days
 const static int MIN_SEVERE_PERIOD = 4;         // days
 const static float SEVERE_TO_DEAD = 0.1;       // probability
+
+/* intervention level */
+
+/* level 1: people get infected, having obvious symtoms */
+const static int THRESHOLD_OF_MILD_SEVERE = 100;
+
+/* level 2: many people get infected */
+const static int THRESHOLD2_OF_MILD_SEVERE = 300;
+
+/* level 3: people die */
+const static int THRESHOLD_OF_DEATH = 20;
+
+/* level 4: many people die */
+const static int THRESHOLD2_OF_DEATH = 100;
+
+/* level 5: it is threatening humanity */
+const static float THRESHOLD3_OF_DEATH = 0.01;  /* 1 % people die */
+
+
+const static float FACTOR_OF_EVENTS[6] = {1.0, 0.9, 0.7, 0.5, 0.3, 0.1};
+
+
+/* when people know themselves positive, lower the probability to an event */
+
+
 
 #endif
