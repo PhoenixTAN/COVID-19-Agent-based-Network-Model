@@ -8,4 +8,6 @@ void init_network(Agent* network, int NETWORK_SIZE);
 
 void init_agents(Agent* network, int NETWORK_SIZE, int INITIAL_NUM_OF_PRESYMTOMATIC);
 
+void print_network(Agent* network, int NETWORK_SIZE);
+
 #endif

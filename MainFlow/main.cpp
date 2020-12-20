@@ -1,7 +1,6 @@
 #include <iostream>
 #include <set>
 #include <ctime>    /* time seed */
-#include <fstream>  /* file stream */
 #include <omp.h>    /* OpenMP */
 #include "params.hpp"
 #include "agent/hpp/agent.hpp"
@@ -14,8 +13,11 @@
 #include "event/hpp/transmission_event.hpp"
 #include "event/hpp/social_activity.hpp"
 #include "event/hpp/stay_alone.hpp"
+#include "statistics/statistics.hpp"
 
-std::ofstream OutFile("statistics.txt");
+
+/* create the network */
+Agent* network = new Agent[NETWORK_SIZE];
 
 /**
  * @Author Xueyan Xia
@@ -142,22 +144,7 @@ void createMeetingEvents(std::set<int> &set, Agent* network){
 
 }
 
-/**
- * @Author Ziqi Tan
- * @Description print the social network
- *
-*/
-void print_network(Agent* network, int NETWORK_SIZE) {
-    for ( int i = 0; i < NETWORK_SIZE; i++ ) {
-        std::cout << "Agent " << i << ": ";
-        std::vector<Agent*> neighbors = network[i].getNeighbors();
-        std::cout << "num of neighbors: " << neighbors.size() <<  "     ";
-        for ( int j = 0; j < neighbors.size(); j++ ) {
-            std::cout << neighbors[j]->getId() << " ";
-        }
-        std::cout << std::endl;
-    }
-}
+
 
 /**
  * @Author Ziqi Tan
@@ -184,73 +171,8 @@ void updateAgentState(Agent* network, int NETWORK_SIZE) {
 }
 
 
-static int numOfSusceptible = 0;
-static int numOfPresymptomatic = 0;
-static int numOfAsymptomatic = 0;
-static int numOfMild = 0;
-static int numOfRecovered = 0;
-static int numOfSevere = 0;
-static int numOfDead = 0;
 
-/* create the network */
-Agent* network = new Agent[NETWORK_SIZE];
 
-/**
- * @Author print state in terminal and file system
- * 
-*/
-void printAgentState(Agent* network, int NETWORK_SIZE) {
-
-    numOfSusceptible = 0;
-    numOfPresymptomatic = 0;
-    numOfAsymptomatic = 0;
-    numOfMild = 0;
-    numOfRecovered = 0;
-    numOfSevere = 0;
-    numOfDead = 0;
-
-    for ( int i = 0; i < NETWORK_SIZE; i++ ) {
-        Agent* agent = &network[i];
-        WELLNESS state = agent->getWellness();
-
-        switch (state) {
-            case SUSCEPTIBLE:
-                numOfSusceptible++;
-                break;
-            case PRESYMPTOMATIC:
-                numOfPresymptomatic++;
-                break;
-            case ASYMPTOMATIC:
-                numOfAsymptomatic++;
-                break;
-            case MILD:
-                numOfMild++;
-                break;
-            case SEVERE:
-                numOfSevere++;
-                break;
-            case RECOVERED:
-                numOfRecovered++;
-                break;
-            case DEAD:
-                numOfDead++;
-                break;
-            default:
-                break;
-        }
-    }
-
-    /* print the statistics to txt file */
-    OutFile << numOfSusceptible << " " 
-            << numOfPresymptomatic << " "
-            << numOfAsymptomatic << " "
-            << numOfMild << " "
-            << numOfSevere << " "
-            << numOfRecovered << " "
-            << numOfDead << " "
-    << std::endl;
-    
-}
 
 int main() {
 
@@ -261,7 +183,7 @@ int main() {
     init_agents(network, NETWORK_SIZE, INITIAL_NUM_OF_PRESYMTOMATIC);
 
     /* initialize the network */
-    std::cout << "initialize the network..." << std::endl;
+    std::cout << "initializing the network..." << std::endl;
     init_network(network, NETWORK_SIZE);
 
     /* print network */
@@ -269,7 +191,7 @@ int main() {
 
     srand(RANDOM_SEED);
 
-    std::cout << "Max thread: " << MAX_NUM_OF_THREADS << std::endl;
+    std::cout << "Using OpenMP library for parallel computing. Max thread: " << MAX_NUM_OF_THREADS << std::endl;
 
     // while loop for every hour
     while(true){
@@ -344,12 +266,10 @@ int main() {
 
         /* statistics for each day */
         if (hourNum == 23) {
-            std::cout << "day " << day << std::endl;
+            std::cout << "Day " << day << std::endl;
             printAgentState(network, NETWORK_SIZE);
         }
-
         
     }
 
-    OutFile.close();
 }

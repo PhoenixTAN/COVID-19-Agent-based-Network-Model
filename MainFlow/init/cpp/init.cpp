@@ -20,7 +20,7 @@ void init_network(Agent* network, int NETWORK_SIZE) {
 
     /* initialize part of the network */
     for ( int i = 0; i < initialSize && i < NETWORK_SIZE; i++ ) {
-        if ( i % 50 == 0 ) {
+        if ( i % 200 == 0 ) {
             std::cout << "Initializing agent " << i << std::endl;
         }
         
@@ -43,7 +43,7 @@ void init_network(Agent* network, int NETWORK_SIZE) {
     /* initialize the whole network */
     /* add new nodes to the initial network */
     for ( int i = initialSize; i < NETWORK_SIZE; i++ ) {
-        if ( i % 50 == 0 ) {
+        if ( i % 200 == 0 ) {
             std::cout << "Initializing agent " << i << std::endl;
         }
         for ( int j = 0; j < i; j++ ) {
@@ -75,3 +75,20 @@ void init_agents(Agent* network, int NETWORK_SIZE, int INITIAL_NUM_OF_PRESYMTOMA
     }
 }
 
+
+/**
+ * @Author Ziqi Tan
+ * @Description print the social network
+ *
+*/
+void print_network(Agent* network, int NETWORK_SIZE) {
+    for ( int i = 0; i < NETWORK_SIZE; i++ ) {
+        std::cout << "Agent " << i << ": ";
+        std::vector<Agent*> neighbors = network[i].getNeighbors();
+        std::cout << "num of neighbors: " << neighbors.size() <<  "     ";
+        for ( int j = 0; j < neighbors.size(); j++ ) {
+            std::cout << neighbors[j]->getId() << " ";
+        }
+        std::cout << std::endl;
+    }
+}

@@ -14,7 +14,7 @@ extern int MAX_NUM_OF_THREADS;
 
 /* Network */
 const static int SIMULATION_DAYS = 120;
-const static int NETWORK_SIZE = 60000;  
+const static int NETWORK_SIZE = 10000;  
 
 /* Event generator */
 const static int MAXIMUM_NUM_OF_AGENTS_EACH_SOCIAL_EVENT = 30;
@@ -82,6 +82,13 @@ const static float FACTOR_OF_EVENTS[6] = {1.0, 0.9, 0.7, 0.5, 0.3, 0.1};
 
 /* when people know themselves positive, lower the probability to an event */
 
-
+/* statistics */
+extern int numOfSusceptible;
+extern int numOfPresymptomatic;
+extern int numOfAsymptomatic;
+extern int numOfMild;
+extern int numOfRecovered;
+extern int numOfSevere;
+extern int numOfDead;
 
 #endif

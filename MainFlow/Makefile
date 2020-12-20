@@ -1,5 +1,5 @@
-main: main.cpp init.o agent.o event.o meeting.o non_transmission_event.o social_activity.o stay_alone.o transmission_event.o clock.o hour.o params.o
-	g++ -fopenmp -o main main.cpp init.o agent.o event.o meeting.o non_transmission_event.o social_activity.o stay_alone.o transmission_event.o clock.o hour.o params.o
+main: main.cpp init.o agent.o event.o meeting.o non_transmission_event.o social_activity.o stay_alone.o transmission_event.o clock.o hour.o params.o statistics.o
+	g++ -fopenmp -o main main.cpp init.o agent.o event.o meeting.o non_transmission_event.o social_activity.o stay_alone.o transmission_event.o clock.o hour.o params.o statistics.o
 
 params.o: params.cpp
 	g++ -c -o params.o params.cpp
@@ -34,7 +34,15 @@ clock.o: ./time/cpp/clock.cpp
 hour.o: ./time/cpp/hour.cpp
 	g++ -c -o hour.o ./time/cpp/hour.cpp
 
+statistics.o: ./statistics/statistics.cpp
+	g++ -c -o statistics.o ./statistics/statistics.cpp
 
 clean:
 	rm *.o
 	rm *.exe
+	rm ./statistics/statistics.txt
+
+winClean:
+	del *.o
+	del *.exe
+	del /s statistics.txt
