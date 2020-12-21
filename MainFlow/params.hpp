@@ -13,7 +13,7 @@ const static unsigned int RANDOM_SEED = 10;
 extern int MAX_NUM_OF_THREADS;
 
 /* Network */
-const static int SIMULATION_DAYS = 120;
+const static int SIMULATION_DAYS = 100;
 const static int NETWORK_SIZE = 10000;  
 
 /* Event generator */
@@ -74,7 +74,7 @@ const static int THRESHOLD_OF_DEATH = 20;
 const static int THRESHOLD2_OF_DEATH = 100;
 
 /* level 5: it is threatening humanity */
-const static float THRESHOLD3_OF_DEATH = 0.01;  /* 1 % people die */
+const static float THRESHOLD3_OF_DEATH = 0.01;  /* 1% people die */
 
 
 const static float FACTOR_OF_EVENTS[6] = {1.0, 0.9, 0.7, 0.5, 0.3, 0.1};
@@ -83,12 +83,12 @@ const static float FACTOR_OF_EVENTS[6] = {1.0, 0.9, 0.7, 0.5, 0.3, 0.1};
 /* when people know themselves positive, lower the probability to an event */
 
 /* statistics */
-extern int numOfSusceptible;
-extern int numOfPresymptomatic;
-extern int numOfAsymptomatic;
-extern int numOfMild;
-extern int numOfRecovered;
-extern int numOfSevere;
-extern int numOfDead;
+extern int NUM_OF_SUSCEPTIBLE;
+extern int NUM_OF_PRESYMPTOMATIC;
+extern int NUM_OF_ASYMPTOMATIC;
+extern int NUM_OF_MILD;
+extern int NUM_OF_SEVERE;
+extern int NUM_OF_RECOVERED;
+extern int NUM_OF_DEATH;
 
 #endif

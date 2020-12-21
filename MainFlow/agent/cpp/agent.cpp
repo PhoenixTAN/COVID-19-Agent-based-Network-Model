@@ -189,7 +189,7 @@ void Agent::setIncubationPeriod(bool defaultPeriod) {
     while ( incubationDays < MIN_INCUBATION_PERIOD && incubationDays > MAX_INCUBATION_PEROID ) {
         incubationDays = std::lround(N(DEFAULT_RANDOM_ENGINE));
     }
-
+    
     this->incubationPeriod = incubationDays;
 }
 

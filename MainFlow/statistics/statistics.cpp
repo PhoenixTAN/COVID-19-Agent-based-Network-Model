@@ -20,14 +20,13 @@ void printAgentState(Agent* network, int NETWORK_SIZE) {
         std::cout << "cannot open file" << std::endl;
     }
 
-    
-    numOfSusceptible = 0;
-    numOfPresymptomatic = 0;
-    numOfAsymptomatic = 0;
-    numOfMild = 0;
-    numOfRecovered = 0;
-    numOfSevere = 0;
-    numOfDead = 0;
+    NUM_OF_SUSCEPTIBLE = 0;
+    NUM_OF_PRESYMPTOMATIC = 0;
+    NUM_OF_ASYMPTOMATIC = 0;
+    NUM_OF_MILD = 0;
+    NUM_OF_SEVERE = 0;
+    NUM_OF_RECOVERED = 0;
+    NUM_OF_DEATH = 0;
 
     for ( int i = 0; i < NETWORK_SIZE; i++ ) {
         Agent* agent = &network[i];
@@ -35,25 +34,25 @@ void printAgentState(Agent* network, int NETWORK_SIZE) {
 
         switch (state) {
             case SUSCEPTIBLE:
-                numOfSusceptible++;
+                NUM_OF_SUSCEPTIBLE++;
                 break;
             case PRESYMPTOMATIC:
-                numOfPresymptomatic++;
+                NUM_OF_PRESYMPTOMATIC++;
                 break;
             case ASYMPTOMATIC:
-                numOfAsymptomatic++;
+                NUM_OF_ASYMPTOMATIC++;
                 break;
             case MILD:
-                numOfMild++;
+                NUM_OF_MILD++;
                 break;
             case SEVERE:
-                numOfSevere++;
+                NUM_OF_SEVERE++;
                 break;
             case RECOVERED:
-                numOfRecovered++;
+                NUM_OF_RECOVERED++;
                 break;
             case DEAD:
-                numOfDead++;
+                NUM_OF_DEATH++;
                 break;
             default:
                 break;
@@ -61,13 +60,13 @@ void printAgentState(Agent* network, int NETWORK_SIZE) {
     }
 
     /* print the statistics to txt file */
-    file << numOfSusceptible << " " 
-            << numOfPresymptomatic << " "
-            << numOfAsymptomatic << " "
-            << numOfMild << " "
-            << numOfSevere << " "
-            << numOfRecovered << " "
-            << numOfDead << " "
+    file << NUM_OF_SUSCEPTIBLE << " " 
+            << NUM_OF_PRESYMPTOMATIC << " "
+            << NUM_OF_ASYMPTOMATIC << " "
+            << NUM_OF_MILD << " "
+            << NUM_OF_SEVERE << " "
+            << NUM_OF_RECOVERED << " "
+            << NUM_OF_DEATH << " "
     << std::endl;
 
     file.close();
