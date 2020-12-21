@@ -21,7 +21,6 @@ void Simulator::start() {
     init_agents();
 
     /* initialize the network */
-    std::cout << "initializing the network..." << std::endl;
     init_network();
 
     /* print network */
@@ -111,6 +110,101 @@ void Simulator::start() {
 
 /**
  * @Author Ziqi Tan
+ * @Description set agent id and randomly infect some people.
+*/
+void Simulator::init_agents() {
+
+    for ( int i = 0; i < NETWORK_SIZE; i++ ) {
+        network[i].setId(i);
+    }
+
+    /* randomly infect some people */
+    std::cout << "Randomly infect " << INITIAL_NUM_OF_PRESYMTOMATIC << " people." << std::endl; 
+    int infected = 0;
+    while ( infected < INITIAL_NUM_OF_PRESYMTOMATIC) {
+        int agentID = rand() % NETWORK_SIZE;
+        network[agentID].setWellness(PRESYMPTOMATIC);
+        network[agentID].setIncubationPeriod(true);     // true: default incubation period
+        infected++;
+    }
+}
+
+/**
+ * Description: use BA algorithm to initialize social network.
+ * 
+*/
+void Simulator::init_network() {
+
+    std::cout << "Initializing the network: " << std::endl;
+    /* initial network size */
+    int initialSize = 10;
+    
+    /* connect others with half and half probability */
+    const float PROBABILITY_OF_CONNECTION = 0.5;
+
+    /* initialize part of the network */
+    for ( int i = 0; i < initialSize && i < NETWORK_SIZE; i++ ) {
+        
+        for ( int j = 0; j < initialSize && i < NETWORK_SIZE; j++ ) {
+            // a node cannot connect itself
+            if ( i == j ) {
+                continue;
+            }
+
+            // flip coin
+            float coin = rand() / (float)(RAND_MAX);
+
+            if ( coin < PROBABILITY_OF_CONNECTION && !network[i].hasNeighbor(network[j].getId()) ) {
+                network[i].addNeighbor(j);
+                network[j].addNeighbor(i);
+            }
+        }
+    }
+
+    /* initialize the whole network */
+    /* add new nodes to the initial network */
+    for ( int i = initialSize; i < NETWORK_SIZE; i++ ) {
+        if ( i % 1000 == 0 ) {
+            std::cout <<  i / (float)NETWORK_SIZE * 100.0 << "% " << "\r";
+        }
+        for ( int j = 0; j < i; j++ ) {
+            /* the probability of that agent i join agent j's network */
+            /* avoid dividing zero and one */
+            float probabilityToJoin = 1.0 / (network[j].getNumOfNeighbors() + 2);
+            float coin = rand() / (float)(RAND_MAX);
+
+            if ( coin < probabilityToJoin ) {
+                network[i].addNeighbor(j);
+                network[j].addNeighbor(i);
+            }
+        }
+    }
+
+    std::cout << "Finish!" << std::endl;
+}
+
+
+/**
+ * @Author Ziqi Tan
+ * @Description print the social network
+ *
+*/
+void Simulator::print_network() {
+    for ( int i = 0; i < NETWORK_SIZE; i++ ) {
+        std::cout << "Agent " << i << ": ";
+        std::bitset<NETWORK_SIZE>* neighbors = network[i].getNeighbors();
+        std::cout << "num of neighbors: " << neighbors->size() <<  "     ";
+        for ( int j = 0; j < neighbors->size(); j++ ) {
+            if ( neighbors->test(j) ) {
+                std::cout << j << " ";
+            }
+        }
+        std::cout << std::endl;
+    }
+}
+
+/**
+ * @Author Ziqi Tan
  * @Description execute the events
 */
 void Simulator::agentEventExecution() {
@@ -132,94 +226,3 @@ void Simulator::updateAgentState() {
         agent->updateWellness();
     }
 }
-
-/**
- * Description: use 
- * 
-*/
-void Simulator::init_network() {
-    /* initial network size */
-    // const int INITIAL_NETWORK_PROPORTION = 10;
-
-    // int initialSize = NETWORK_SIZE / INITIAL_NETWORK_PROPORTION;
-    int initialSize = 10;
-    /* connect others with half and half probability */
-    const float PROBABILITY_OF_CONNECTION = 0.5;
-
-    /* initialize part of the network */
-    for ( int i = 0; i < initialSize && i < NETWORK_SIZE; i++ ) {
-        if ( i % 200 == 0 ) {
-            std::cout << "Initializing agent " << i << "." <<std::endl;
-        }
-        
-        for ( int j = 0; j < initialSize && i < NETWORK_SIZE; j++ ) {
-            // a node cannot connect itself
-            if ( i == j ) {
-                continue;
-            }
-
-            // flip coin
-            float coin = rand() / (float)(RAND_MAX);
-
-            if ( coin < PROBABILITY_OF_CONNECTION && !network[i].hasNeighbor(network[j].getId()) ) {
-                network[i].addNeighbor(&network[j]);
-                network[j].addNeighbor(&network[i]);
-            }
-        }
-    }
-
-    /* initialize the whole network */
-    /* add new nodes to the initial network */
-    for ( int i = initialSize; i < NETWORK_SIZE; i++ ) {
-        if ( i % 200 == 0 ) {
-            std::cout << "Initializing agent " << i << "." << std::endl;
-        }
-        for ( int j = 0; j < i; j++ ) {
-            /* the probability of that agent i join agent j's network */
-            /* avoid dividing zero and one */
-            float probabilityToJoin = 1.0 / (network[j].getNeighbors().size() + 2);
-            float coin = rand() / (float)(RAND_MAX);
-
-            if ( coin < probabilityToJoin /*&& !network[i].hasNeighbor(network[j].getId())*/ ) {
-                network[i].addNeighbor(&network[j]);
-                network[j].addNeighbor(&network[i]);
-            }
-        }
-    }
-}
-
-void Simulator::init_agents() {
-
-    for ( int i = 0; i < NETWORK_SIZE; i++ ) {
-        network[i].setId(i);
-    }
-
-    /* randomly infect some people */
-    std::cout << "Randomly infect " << INITIAL_NUM_OF_PRESYMTOMATIC << " people." << std::endl; 
-    int infected = 0;
-    while ( infected < INITIAL_NUM_OF_PRESYMTOMATIC) {
-        int agentID = rand() % NETWORK_SIZE;
-        network[agentID].setWellness(PRESYMPTOMATIC);
-        network[agentID].setIncubationPeriod(true);     // true: default incubation period
-        infected++;
-    }
-}
-
-
-/**
- * @Author Ziqi Tan
- * @Description print the social network
- *
-*/
-void Simulator::print_network() {
-    for ( int i = 0; i < NETWORK_SIZE; i++ ) {
-        std::cout << "Agent " << i << ": ";
-        std::vector<Agent*> neighbors = network[i].getNeighbors();
-        std::cout << "num of neighbors: " << neighbors.size() <<  "     ";
-        for ( int j = 0; j < neighbors.size(); j++ ) {
-            std::cout << neighbors[j]->getId() << " ";
-        }
-        std::cout << std::endl;
-    }
-}
-

@@ -16,14 +16,6 @@
 #include <iostream>
 #include <random>
 
-Agent::Agent(int id)
-{
-    this->id = id;
-    this->wellness = SUSCEPTIBLE;
-    this->nextState = INIT;
-    this->event = NULL;
-    this->stateDurationHours = 0;
-};
 
 Agent::Agent() {
     this->id = 0;
@@ -31,6 +23,7 @@ Agent::Agent() {
     this->nextState = INIT;
     this->event = NULL;
     this->stateDurationHours = 0;
+    this->neighbors = new std::bitset<NETWORK_SIZE>;
 }
 
 int Agent::getId()
@@ -121,23 +114,19 @@ void Agent::executeEvent()
     
 };
 
-void Agent::setNextState(WELLNESS nextState)
-{
+void Agent::setNextState(WELLNESS nextState) {
     this->nextState = nextState;
 };
 
-Event* Agent::getEvent()
-{
+Event* Agent::getEvent() {
     return this->event;
 };
 
-void Agent::setEvent(Event* event)
-{
+void Agent::setEvent(Event* event) {
     this->event = event;
 };
 
-void Agent::updateWellness()
-{
+void Agent::updateWellness() {
     if (this->nextState != INIT && this->wellness != this->nextState) {
         this->wellness = this->nextState;
         this->nextState = INIT;
@@ -148,21 +137,25 @@ void Agent::updateWellness()
     }
 };
 
-std::vector<Agent*> Agent::getNeighbors()
-{
+std::bitset<NETWORK_SIZE>* Agent::getNeighbors() {
     return this->neighbors;
 };
 
-void Agent::addNeighbor(Agent* agent) {
-    this->neighbors.push_back(agent);
+void Agent::addNeighbor(int neighborId) {
+    if ( neighborId == this->id) {
+        std::cout << "Cannot add yourself as a neighbor." << std::endl;
+        return ;
+    }
+    this->neighbors->set(neighborId);
+    this->numOfNeighbors++;
 }
 
 bool Agent::hasNeighbor(int neighborId) {
-    for ( int i = 0; i < this->neighbors.size(); i++ ) {
-        if ( neighbors[i]->getId() == neighborId ) {
-            return true;
-        }
+    
+    if (this->neighbors->test(neighborId)) {
+        return true;
     }
+
     return false;
 }
 
@@ -206,4 +199,8 @@ void Agent::setSeverePeriod() {
 void Agent::setAsymptomaticPeriod() {
     int asymptomaticDays = rand() % (MAX_ASYMPTOMATIC_PERIOD - MIN_ASYMPTOMATIC_PEROID) + MIN_ASYMPTOMATIC_PEROID;
     this->asymptomaticPeroid = asymptomaticDays;
+}
+
+int Agent::getNumOfNeighbors() {
+    return this->numOfNeighbors;
 }

@@ -3,7 +3,6 @@
 #include "params.hpp"
 #include "agent/hpp/agent.hpp"
 #include "event/hpp/event.hpp"
-#include "init/hpp/init.hpp"
 #include "time/hpp/clock.hpp"
 #include "time/hpp/hour.hpp"
 #include "statistics/statistics.hpp"
@@ -17,6 +16,7 @@ int main() {
     Clock* clock = Clock::getInstance();
 
     /* create the network */
+    std::cout << "Creating network with size of " << NETWORK_SIZE << "." << std::endl;
     Agent* network = new Agent[NETWORK_SIZE];
 
     /* Event generator */

@@ -110,7 +110,7 @@ void EventGenerator::createMeetingEvents(Agent* network) {
     Agent* agent = &network[agentID];
 
     // get his neighbors
-    std::vector<Agent*> neighbors = agent->getNeighbors();
+    std::bitset<NETWORK_SIZE>* neighbors = agent->getNeighbors();
 
     // set event to this agent
     agent->setEvent(event);
@@ -119,27 +119,29 @@ void EventGenerator::createMeetingEvents(Agent* network) {
     // delete the agent in set
     EventGenerator::agentSet.erase(agentID);
 
-    for(int i = 0; i < neighbors.size(); i++){
-        
-        Agent* neighbor = neighbors[i];
+    for(int i = 0; i < neighbors->size(); i++) {
+        if ( neighbors->test(i) ) {
+            Agent* neighbor = &network[i];
 
-        auto search = EventGenerator::agentSet.find(neighbor->getId());
-        if(network[agentID].getWellness() != DEAD && search != EventGenerator::agentSet.end()){
+            auto search = EventGenerator::agentSet.find(neighbor->getId());
+            if(network[agentID].getWellness() != DEAD && search != EventGenerator::agentSet.end()){
 
-            // Probability
-            float probability = rand() / float(RAND_MAX);
+                // Probability
+                float probability = rand() / float(RAND_MAX);
 
-            if(probability < EXECUTE_METTING_EVENT){
-                neighbor->setEvent(event);
-                event->increment(neighbor->getWellness());
-                EventGenerator::agentSet.erase(neighbor->getId());
-            } else {
-                event = new StayAlone();
-                neighbor->setEvent(event);
-                EventGenerator::agentSet.erase(neighbor->getId());
+                if(probability < EXECUTE_METTING_EVENT){
+                    neighbor->setEvent(event);
+                    event->increment(neighbor->getWellness());
+                    EventGenerator::agentSet.erase(neighbor->getId());
+                } else {
+                    event = new StayAlone();
+                    neighbor->setEvent(event);
+                    EventGenerator::agentSet.erase(neighbor->getId());
+                }
+
             }
-
         }
+        
     }
 
 }

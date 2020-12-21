@@ -1,11 +1,8 @@
-main: main.cpp init.o agent.o event.o meeting.o non_transmission_event.o social_activity.o stay_alone.o transmission_event.o clock.o hour.o params.o statistics.o event_generator.o simulator.o
-	g++ -fopenmp -o main main.cpp init.o agent.o event.o meeting.o non_transmission_event.o social_activity.o stay_alone.o transmission_event.o clock.o hour.o params.o statistics.o event_generator.o simulator.o
+main: main.cpp agent.o event.o meeting.o non_transmission_event.o social_activity.o stay_alone.o transmission_event.o clock.o hour.o params.o statistics.o event_generator.o simulator.o
+	g++ -fopenmp -o main main.cpp  agent.o event.o meeting.o non_transmission_event.o social_activity.o stay_alone.o transmission_event.o clock.o hour.o params.o statistics.o event_generator.o simulator.o
 
 params.o: params.cpp
 	g++ -c -o params.o params.cpp
-
-init.o: ./init/cpp/init.cpp 
-	g++ -c -o init.o ./init/cpp/init.cpp
 
 agent.o: ./agent/cpp/agent.cpp
 	g++ -c -o agent.o ./agent/cpp/agent.cpp

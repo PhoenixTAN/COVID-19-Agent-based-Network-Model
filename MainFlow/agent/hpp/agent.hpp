@@ -10,6 +10,7 @@
 #include "../../event/hpp/event.hpp"
 #include "wellness.hpp"
 #include <vector>
+#include <bitset>
 
 class Agent
 {
@@ -18,7 +19,8 @@ private:
     WELLNESS wellness;
     WELLNESS nextState;
     Event* event;
-    std::vector<Agent*> neighbors;
+    std::bitset<NETWORK_SIZE> *neighbors;
+    int numOfNeighbors;
     int stateDurationHours;      // hours, the duration of the current state
     int incubationPeriod;   // days
     int mildPeriod;     // days
@@ -28,7 +30,6 @@ private:
     int asymptomaticPeroid;     // days
     void setAsymptomaticPeriod();   
 public:
-    Agent(int number); // constructor
     Agent();    // default constructor
     int getId();
     void setId(int id);
@@ -40,10 +41,11 @@ public:
     void executeEvent();
     void setWellness(WELLNESS state);
     void updateWellness();
-    std::vector<Agent*> getNeighbors();
-    void addNeighbor(Agent* agent);
+    std::bitset<NETWORK_SIZE>* getNeighbors();
+    void addNeighbor(int neighborId);
     bool hasNeighbor(int neighborId);
     void setIncubationPeriod(bool defaultPeriod);
+    int getNumOfNeighbors();
 };
 
 #endif /* Agent_hpp */
