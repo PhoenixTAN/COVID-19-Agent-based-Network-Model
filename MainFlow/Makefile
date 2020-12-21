@@ -1,5 +1,5 @@
-main: main.cpp init.o agent.o event.o meeting.o non_transmission_event.o social_activity.o stay_alone.o transmission_event.o clock.o hour.o params.o statistics.o
-	g++ -fopenmp -o main main.cpp init.o agent.o event.o meeting.o non_transmission_event.o social_activity.o stay_alone.o transmission_event.o clock.o hour.o params.o statistics.o
+main: main.cpp init.o agent.o event.o meeting.o non_transmission_event.o social_activity.o stay_alone.o transmission_event.o clock.o hour.o params.o statistics.o event_generator.o
+	g++ -fopenmp -o main main.cpp init.o agent.o event.o meeting.o non_transmission_event.o social_activity.o stay_alone.o transmission_event.o clock.o hour.o params.o statistics.o event_generator.o
 
 params.o: params.cpp
 	g++ -c -o params.o params.cpp
@@ -36,6 +36,9 @@ hour.o: ./time/cpp/hour.cpp
 
 statistics.o: ./statistics/statistics.cpp
 	g++ -c -o statistics.o ./statistics/statistics.cpp
+
+event_generator.o: ./event_generator/event_generator.cpp
+	g++ -c -o event_generator.o ./event_generator/event_generator.cpp
 
 clean:
 	rm *.o

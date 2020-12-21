@@ -5,7 +5,7 @@
 |-------------|-------------|
 |  Ziqi Tan   | Tech lead. Test Use different parameters to run the simulation.  Generate a social network.|
 | **Xueyan Xia**, Ziqi Tan | System design, Model integration, and parallel computing design.  |
-| *Xueyan Xia*   | Generate events. Timer design and programming.  |
+| **Xueyan Xia**   | Generate events. Timer design and programming.  |
 | **Kaijia You**, Peiqing Lu | Agent object-oriented design and programming. |
 | **Tian Ding**, Zhelin Liao  | Event design and programming.  |
 | Xiaoxin Gan | Statistics and plotting, performance evaluation.  |
