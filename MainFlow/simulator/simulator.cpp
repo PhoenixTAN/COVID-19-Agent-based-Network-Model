@@ -24,8 +24,9 @@ void Simulator::start() {
     init_network();
 
     /* print network */
-    // print_network(network, NETWORK_SIZE);
+    print_network();
 
+    int intervention_level = 0;
     // while loop for every hour
     while(true){
 
@@ -41,31 +42,13 @@ void Simulator::start() {
         // create a hash set for Agents' id
 
         eventGenerator->createAgentSet(network);
-        int intervention_level = 0;
+        
         switch (hour)
         {
             case WORKING:
                 /* generate an event for each agent for each hour */
                 /* each agent has only one event each hour */
                 /* initialize meeting events based on social network */
-
-                
-                if ( NUM_OF_DEATH / (float)NETWORK_SIZE > THRESHOLD3_OF_DEATH ) {
-                    intervention_level = 5;
-                }
-                else if ( NUM_OF_DEATH > THRESHOLD2_OF_DEATH ) {
-                    intervention_level = 4;
-                }
-                else if ( NUM_OF_DEATH > THRESHOLD_OF_DEATH ) {
-                    intervention_level = 3;
-                }
-                else if ( NUM_OF_MILD + NUM_OF_SEVERE > THRESHOLD2_OF_MILD_SEVERE ) {
-                    intervention_level = 2;
-                }
-                else if ( NUM_OF_MILD + NUM_OF_SEVERE > THRESHOLD_OF_MILD_SEVERE ) {
-                    intervention_level = 1;
-                }
-
 
                 for ( int i = 0; i < NUM_OF_MEETING_EACH_HOUR * FACTOR_OF_EVENTS[intervention_level]; i++ ) {
                     eventGenerator->createMeetingEvents(network);
@@ -101,6 +84,26 @@ void Simulator::start() {
         if (hourNum == 23) {
             std::cout << "Day " << day  << " ends."<< std::endl;
             printAgentState(network, NETWORK_SIZE);
+
+            if ( NUM_OF_DEATH / (float)NETWORK_SIZE > THRESHOLD3_OF_DEATH ) {
+                intervention_level = 5;
+            }
+            else if ( NUM_OF_DEATH > THRESHOLD2_OF_DEATH ) {
+                intervention_level = 4;
+            }
+            else if ( NUM_OF_DEATH > THRESHOLD_OF_DEATH ) {
+                intervention_level = 3;
+            }
+            else if ( NUM_OF_MILD + NUM_OF_SEVERE > THRESHOLD2_OF_MILD_SEVERE ) {
+                intervention_level = 2;
+            }
+            else if ( NUM_OF_MILD + NUM_OF_SEVERE > THRESHOLD_OF_MILD_SEVERE ) {
+                intervention_level = 1;
+            }
+
+            if ( intervention_level != 0 ) {
+                std::cout << "Intervention level: " << intervention_level << std::endl;
+            }
         }
         
     }
@@ -145,7 +148,7 @@ void Simulator::init_network() {
     /* initialize part of the network */
     for ( int i = 0; i < initialSize && i < NETWORK_SIZE; i++ ) {
         
-        for ( int j = 0; j < initialSize && i < NETWORK_SIZE; j++ ) {
+        for ( int j = 0; j < initialSize && j < NETWORK_SIZE; j++ ) {
             // a node cannot connect itself
             if ( i == j ) {
                 continue;
@@ -170,7 +173,7 @@ void Simulator::init_network() {
         for ( int j = 0; j < i; j++ ) {
             /* the probability of that agent i join agent j's network */
             /* avoid dividing zero and one */
-            float probabilityToJoin = 1.0 / (network[j].getNumOfNeighbors() + 2);
+            float probabilityToJoin = 1.0 / (network[j].getNumOfNeighbors() * 50 + 2);
             float coin = rand() / (float)(RAND_MAX);
 
             if ( coin < probabilityToJoin ) {
@@ -193,12 +196,12 @@ void Simulator::print_network() {
     for ( int i = 0; i < NETWORK_SIZE; i++ ) {
         std::cout << "Agent " << i << ": ";
         std::bitset<NETWORK_SIZE>* neighbors = network[i].getNeighbors();
-        std::cout << "num of neighbors: " << neighbors->size() <<  "     ";
-        for ( int j = 0; j < neighbors->size(); j++ ) {
+        std::cout << "num of neighbors: " << network[i].getNumOfNeighbors() <<  "     ";
+        /*for ( int j = 0; j < neighbors->size(); j++ ) {
             if ( neighbors->test(j) ) {
                 std::cout << j << " ";
             }
-        }
+        }*/
         std::cout << std::endl;
     }
 }
